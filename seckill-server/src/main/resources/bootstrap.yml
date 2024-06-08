@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: seckill_server
+  cloud:
+    nacos:
+      server-addr: 192.168.88.128:8848
+      config:
+        group: DEFAULT_GROUP
+        namespace: 9476427b-f046-4b92-a8a6-d9b4a3587e8e # dev环境
+        shared-configs: common.yml
+
