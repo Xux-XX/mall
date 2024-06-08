@@ -1,0 +1,19 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: seckill-server
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.88.128:3306/mall
+  cloud:
+    nacos:
+      server-addr: 192.168.88.128
+  data:
+    redis:
+      host: 192.168.88.128
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
