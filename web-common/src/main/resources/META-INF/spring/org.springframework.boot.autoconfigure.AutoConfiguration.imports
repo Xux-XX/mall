@@ -1,2 +1,3 @@
 com.xux.common.config.RedisConfig
 com.xux.common.config.MybatisConfig
+com.xux.common.aspect.LogAspect
