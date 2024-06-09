@@ -1,12 +1,14 @@
 package com.xux.comment.util;
 
 import com.xux.comment.mapper.SensitiveWordMapper;
+import com.xux.common.annotation.Log;
 import jakarta.annotation.PostConstruct;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import reactor.util.function.Tuple2;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 使用AC自动机快速匹配敏感词
@@ -69,7 +71,12 @@ public class Trie {
      * @param word 敏感词
      */
     public void addWord(String word) {
+        Node now = root;
+        for (int i = 0; i < word.length(); i++){
+            char ch = word.charAt(i);
+            now = now.next.computeIfAbsent(ch, Node::new);
 
+        }
     }
 
 
@@ -122,6 +129,7 @@ public class Trie {
                 // 父节点的fail存在有character节点时, 直接指向这个节点
                 // 否则指向root节点
                 child.fail = parent.fail.next.getOrDefault(character, root);
+                queue.add(child);
             });
         }
     }
