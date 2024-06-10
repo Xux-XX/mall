@@ -29,6 +29,7 @@
         <web-common.version>0.0.1-SNAPSHOT</web-common.version>
         <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
         <spring-cloud.version>2022.0.3</spring-cloud.version>
+        <knife4j.version>4.1.0</knife4j.version>
     </properties>
 
     <dependencyManagement>

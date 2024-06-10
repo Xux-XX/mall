@@ -1,6 +1,9 @@
 package com.xux.common.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.xux.common.context.UserContext;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +18,9 @@ public class MybatisConfig {
     private final String UPDATE_TIME = "updateTime";
     private final String UPDATE_USER = "updateUser";
 
+    /**
+     * 自动填充元素配置
+     */
     @Bean
     public MetaObjectHandler metaObjectHandler(){
         return new MetaObjectHandler() {
@@ -34,5 +40,15 @@ public class MybatisConfig {
                 this.strictUpdateFill(metaObject, UPDATE_USER, Integer.class, UserContext.get().getUserId());
             }
         };
+    }
+
+    /**
+     * 分解插件配置
+     */
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor(){
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        return interceptor;
     }
 }

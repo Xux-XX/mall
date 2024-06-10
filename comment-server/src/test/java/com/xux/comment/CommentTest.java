@@ -1,8 +1,11 @@
 package com.xux.comment;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xux.comment.mapper.SensitiveWordMapper;
 import com.xux.comment.pojo.entity.Comment;
+import com.xux.comment.pojo.entity.SensitiveWord;
 import com.xux.comment.service.CommentService;
+import com.xux.comment.service.SensitiveWordService;
 import com.xux.comment.util.Trie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ public class CommentTest {
     SensitiveWordMapper mapper;
     @Autowired
     Trie trie;
+    @Autowired
+    SensitiveWordService sensitiveWordService;
     @Test
     void test(){
         Comment comment = new Comment();
@@ -24,8 +29,12 @@ public class CommentTest {
     }
 
     @Test
+    void testService(){
+        System.out.println(sensitiveWordService.getPage(2, 3));
+    }
+    @Test
     void testMapper(){
-        System.out.println(mapper.selectWordList());
+        System.out.println(mapper.selectPage(new Page<>(-2, 3), null));
     }
 
     @Test

@@ -1,13 +1,13 @@
 package com.xux.comment.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xux.comment.mapper.SensitiveWordMapper;
 import com.xux.comment.pojo.entity.SensitiveWord;
 import com.xux.comment.pojo.enums.SensitiveEnum;
 import com.xux.comment.service.SensitiveWordService;
 import com.xux.comment.util.Trie;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +48,11 @@ public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, S
 
     @Override
     public List<String> getPage(Integer pageNumber, Integer pageSize) {
-        return null;
+        return this.getBaseMapper()
+                .selectPage(new Page<>(pageNumber, pageSize, false), null)
+                .getRecords()
+                .stream()
+                .map(SensitiveWord::getWord)
+                .toList();
     }
 }
