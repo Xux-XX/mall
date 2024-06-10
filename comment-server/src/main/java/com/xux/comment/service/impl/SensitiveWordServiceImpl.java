@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * TODO: 权限验证
+ */
 @Service
 @RequiredArgsConstructor
 public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, SensitiveWord>

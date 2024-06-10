@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 public class TestWithoutSpring {
     @Test
     void test(){
-        String s = "12456";
-        System.out.println(s.substring(5));
+        Object temp = 1;
+        boolean is = (boolean)temp;
+        System.out.println(is);
     }
 
     @Test

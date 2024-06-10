@@ -6,9 +6,10 @@ package com.xux.comment.pojo.enums;
  * @date 2024/6/9 15:16
  */
 public enum SensitiveEnum {
+    SUCCESS("操作成功"),
+    PERMISSION_DENIED("权限不足"),
     DUPLICATE("该敏感词已存在"),
-    NOT_FOUND("该敏感词不存在"),
-    SUCCESS("操作成功");
+    NOT_FOUND("该敏感词不存在");
 
     final String message;
 
