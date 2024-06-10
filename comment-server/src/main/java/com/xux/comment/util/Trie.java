@@ -87,8 +87,9 @@ public class Trie {
                         reverseList.computeIfAbsent(node, n -> new ArrayList<>()).add(child);
                     }
                 }
-                // 更新这个新建节点的fail指针
-                node.fail = now.fail.next.getOrDefault(ch, root);
+                // 更新这个新建节点的fail指针,(需要特判父节点为root的情况)
+                if(now != root)node.fail = now.fail.next.getOrDefault(ch, root);
+                else node.fail = root;
                 now.next.put(ch, node);
             }
             now = node;
@@ -119,12 +120,14 @@ public class Trie {
         }
         char ch = word.charAt(index);
         Node child = now.next.get(ch);
-        if (child != null){
-            removeWordRecurse(word, index + 1, child);
-            if (child.next.isEmpty()){
-                // 若子节点没有后继节点需要将子节点删除, 并更新fail指针
-                now.next.remove(ch);
-                List<Node> nodeList = reverseList.get(child);
+        if (child == null) return;
+        // 匹配成功, 递归下一个单词
+        removeWordRecurse(word, index + 1, child);
+        if (child.next.isEmpty()){
+            // 若子节点没有后继节点需要将子节点删除, 并更新fail指针
+            now.next.remove(ch);
+            List<Node> nodeList = reverseList.get(child);
+            if (nodeList != null){
                 reverseList.remove(child);
                 for (Node node : nodeList) {
                     reverseList.get(child.fail).add(node);
@@ -132,32 +135,8 @@ public class Trie {
                 }
             }
         }
-    }
-//    private boolean removeWordRecurse(String word, int index, Node now){
-//        if (now == null)return false;
-//        if (index == word.length()){
-//            // 成功匹配则将length标记置为0表示这个单词的删除
-//            if (now.next.isEmpty()){
-//                now.next = null;
-//                now.fail = null;
-//                return true;
-//            }
-//            now.length = 0;
-//            return false;
-//        }
-//        char ch = word.charAt(index);
-//        boolean isDelete = removeWordRecurse(word, index + 1, now.next.get(ch));
-//        if (isDelete){
-//            now.next.remove(ch);
-//            if (now.next.isEmpty()){
-//                now.next = null;
-//                now.fail = null;
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
+    }
 
     /**
      * 判断word是否为已经载入的敏感词
@@ -183,10 +162,12 @@ public class Trie {
     @PostConstruct
     public void load() {
         // 建立字典树
+        int cnt = 0;
         for (String s : mapper.selectWordList()) {
             Node now = root;
             for (int i=0; i < s.length(); i++){
                 char ch = s.charAt(i);
+                if (now.next.containsKey(ch) == false) cnt ++;
                 now = now.next.computeIfAbsent(ch, Node::new);
             }
             now.length = s.length();
@@ -200,7 +181,12 @@ public class Trie {
      */
     private void buildFail(){
         Queue<Node> queue = new ArrayDeque<>();
-        queue.add(root);
+        // 预处理第二层节点, fail全部指向根节点
+        root.next.forEach((ch, child) ->{
+            child.fail = root;
+            reverseList.computeIfAbsent(root, node -> new ArrayList<>()).add(child);
+            queue.add(child);
+        });
         while(!queue.isEmpty()){
             Node parent = queue.poll();
             // 更新reverseList

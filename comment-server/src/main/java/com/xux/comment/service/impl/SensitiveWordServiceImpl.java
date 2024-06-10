@@ -36,10 +36,10 @@ public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, S
     @Override
     public SensitiveEnum remove(Integer wordId) {
         // 判断是否存在
-        LambdaQueryWrapper<SensitiveWord> wrapper = new LambdaQueryWrapper<SensitiveWord>().eq(SensitiveWord::getWordId, wordId);
-        if (!this.exists(wrapper)) return SensitiveEnum.NOT_FOUND;
+        SensitiveWord entity = this.getById(wordId);
+        if (entity == null) return SensitiveEnum.NOT_FOUND;
         // 删除ac自动机和数据库中数据
-        String word = this.getById(wordId).getWord();
+        String word = entity.getWord();
         sensitiveTrie.removeWord(word);
         this.removeById(wordId);
         return SensitiveEnum.SUCCESS;
@@ -47,12 +47,9 @@ public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, S
 
 
     @Override
-    public List<String> getPage(Integer pageNumber, Integer pageSize) {
+    public List<SensitiveWord> getPage(Integer pageNumber, Integer pageSize) {
         return this.getBaseMapper()
                 .selectPage(new Page<>(pageNumber, pageSize, false), null)
-                .getRecords()
-                .stream()
-                .map(SensitiveWord::getWord)
-                .toList();
+                .getRecords();
     }
 }

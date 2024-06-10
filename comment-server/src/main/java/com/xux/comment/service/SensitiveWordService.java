@@ -1,5 +1,6 @@
 package com.xux.comment.service;
 
+import com.xux.comment.pojo.entity.SensitiveWord;
 import com.xux.comment.pojo.enums.SensitiveEnum;
 
 import java.util.List;
@@ -25,11 +26,12 @@ public interface SensitiveWordService {
 
     /**
      * 分页查询
+     *
      * @param pageNumber 页数
-     * @param pageSize 页的大小
+     * @param pageSize   页的大小
      * @return 分页查询的结果
      */
-    List<String> getPage(Integer pageNumber, Integer pageSize);
+    List<SensitiveWord> getPage(Integer pageNumber, Integer pageSize);
 
 
 }
