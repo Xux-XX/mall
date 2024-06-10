@@ -8,5 +8,5 @@ import com.xux.common.entity.LogEntity;
  * @date 2024/6/9 18:59
  */
 public interface LogService{
-    public void saveAsync(LogEntity logEntity);
+    void saveAsync(LogEntity logEntity);
 }

@@ -1,5 +1,6 @@
 package com.xux.comment;
 
+import com.xux.comment.util.Trie;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,5 +13,16 @@ public class TestWithoutSpring {
     void test(){
         String s = "12456";
         System.out.println(s.substring(5));
+    }
+
+    @Test
+    void trieTest(){
+        Trie trie = new Trie(null);
+        trie.addWord("测试数据1");
+        trie.addWord("测试数据2");
+        trie.addWord("测试");
+        System.out.println(trie.filter("测试1测试数据1and测试数据2to测试"));
+        trie.removeWord("测试");
+        System.out.println(trie.filter("测试1测试数据1and测试数据2to测试"));
     }
 }

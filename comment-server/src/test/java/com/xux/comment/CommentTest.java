@@ -2,7 +2,6 @@ package com.xux.comment;
 
 import com.xux.comment.mapper.SensitiveWordMapper;
 import com.xux.comment.pojo.entity.Comment;
-import com.xux.comment.pojo.entity.SensitiveWord;
 import com.xux.comment.service.CommentService;
 import com.xux.comment.util.Trie;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ public class CommentTest {
 
     @Test
     void testTrie(){
-        String s = "测试数据1and测试数据2to测试";
+        String s = "测试1测试数据1and测试数据2to测试";
         System.out.println(trie.filter(s));
     }
 }
