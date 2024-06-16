@@ -10,14 +10,20 @@
     </parent>
 
     <groupId>org.xux</groupId>
-    <artifactId>seckill-server</artifactId>
+    <artifactId>product-server</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-    </dependencies>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.xux</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

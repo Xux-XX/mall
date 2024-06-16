@@ -1,0 +1,13 @@
+server:
+  port: 8100
+spring:
+  application:
+    name: gateway-server
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.88.128:8848
+      config:
+        namespace: ${spring.profiles.active}
+        file-extension: yml

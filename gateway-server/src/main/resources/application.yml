@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-server
+          uri: http://localhost:8002
+          predicates:
+            - Path=/user/**
+        - id: product-server
+          uri: http://localhost:8001
+          predicates:
+            - Path=/sensitive/**

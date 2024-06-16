@@ -1,6 +1,6 @@
 package com.xux.seckill.feign;
 
-import com.xux.common.entity.Result;
+import com.xux.utilCommon.entity.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

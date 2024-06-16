@@ -1,0 +1,18 @@
+server:
+  port: 8002
+spring:
+  profiles:
+    active: dev
+  application:
+    name: user-server
+  cloud:
+    nacos:
+      server-addr: 192.168.88.128:8848
+      config:
+        group: DEFAULT_GROUP
+        namespace: ${spring.profiles.active}
+        file-extension: yml
+        shared-configs:
+          - data-id: common.yml
+          - data-id: jwt.yml
+

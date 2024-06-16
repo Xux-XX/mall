@@ -3,7 +3,7 @@ package com.xux.seckill.controller;
 import com.xux.seckill.pojo.enums.SeckillEnum;
 import com.xux.seckill.service.SeckillService;
 import com.xux.common.context.UserContext;
-import com.xux.common.entity.Result;
+import com.xux.utilCommon.entity.Result;
 import com.xux.common.entity.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;

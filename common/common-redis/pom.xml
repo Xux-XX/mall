@@ -5,19 +5,30 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xux</groupId>
-        <artifactId>mall</artifactId>
+        <artifactId>common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.xux</groupId>
-    <artifactId>seckill-server</artifactId>
+    <artifactId>common-redis</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-    </dependencies>
 
+    <dependencies>
+<!--        使用fastjson序列化redis的value-->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+
+        <!--        redis依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
 </project>
