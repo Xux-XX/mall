@@ -3,7 +3,7 @@ package com.xux.core.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.beans.factory.annotation.Value;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,26 +30,27 @@ public class JWTUtil {
     /** jwt中携带的字段 */
     public static final String USER_ID = "userId";
 
+    public static final String ROLE_STATUS = "roleStatus";
+
     private Instant getExpire(){
         return LocalDateTime.now().plusHours(expire).atZone(zoneId).toInstant();
     }
-    public JWTUtil(@Value("${jwt.sign}")String sign,
-                   @Value("${jwt.zone-id}") String zoneId,
-                   @Value("${jwt.expire}") int expire) {
+    public JWTUtil(String sign, int expire, String zoneId) {
         this.expire = expire;
         this.sign = sign;
         this.verifier = JWT.require(Algorithm.HMAC256(sign)).build();
         this.zoneId = ZoneId.of(zoneId);
     }
 
-    public Integer parse(String jwt){
-        return verifier.verify(jwt).getClaim(USER_ID).asInt();
+    public DecodedJWT parse(String jwt){
+        return verifier.verify(jwt);
     }
 
-    public String createJWT(Integer userId){
+    public String createJWT(Integer userId, Integer roleStatus){
         Algorithm algorithm = Algorithm.HMAC256(sign);
         return JWT.create()
                 .withClaim(USER_ID, userId)
+                .withClaim(ROLE_STATUS, roleStatus)
                 .withExpiresAt(getExpire())
                 .sign(algorithm);
     }

@@ -3,6 +3,7 @@ package com.xux.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xux.product.pojo.entity.Comment;
 import com.xux.product.pojo.enums.CommentEnum;
+import com.xux.product.pojo.enums.CommentOrderBy;
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ public interface CommentService extends IService<Comment> {
      * @param pageSize 页大小
      * @return List<Comment>
      */
-    List<Comment> getByStoreId(Integer storeId, Integer pageNumber, Integer pageSize);
+    List<Comment> getByStoreId(Integer storeId, Integer pageNumber, Integer pageSize, CommentOrderBy orderBy);
 
     /**
-     * 根据用户id, 查询评论
+     * 根据用户id, 查询评论, 按照时间从新到旧排序
      * @param userId 用户id
      * @param pageNumber 页数
      * @param pageSize 页大小
@@ -26,13 +27,13 @@ public interface CommentService extends IService<Comment> {
     List<Comment> getByUserId(Integer userId, Integer pageNumber, Integer pageSize);
 
     /**
-     * 获取一个评论下的所有评论
+     * 获取一个评论下的所有评论,按照时间从旧到新排序
      * @param commentId 评论id
      * @param pageNumber 页数
      * @param pageSize 页大小
      * @return List<Comment>
      */
-    List<Comment> getByCommentId(Integer commentId, Integer pageNumber, Integer pageSize);
+    List<Comment> getByParentId(Integer commentId, Integer pageNumber, Integer pageSize);
 
     /**
      * 新增评论

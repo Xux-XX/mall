@@ -33,5 +33,18 @@ public interface SensitiveWordService {
      */
     List<SensitiveWord> getPage(Integer pageNumber, Integer pageSize);
 
+    /**
+     * 批量过滤文本
+     * @param texts 需要过滤的文本
+     * @return List<String> 过滤后的文本
+     */
+    List<String> filter(List<String> texts);
 
+    /**
+     * 判断一段文本中是否含有敏感词
+     * @param text 带判断文本
+     * @return true 含有敏感词
+ *          <p>false 不含有敏感词
+     */
+    boolean hasSensitive(String text);
 }

@@ -4,19 +4,24 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xux.seckill.mapper.ArrangementMapper;
 import com.xux.seckill.pojo.entity.SeckillArrangement;
 import com.xux.seckill.service.ArrangementService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
+
+/**
+ * @author xux
+ * @version 0.1
+ * @since 2024/6/19 22:20
+ */
 @Service
+@RequiredArgsConstructor
 public class ArrangementServiceImpl extends ServiceImpl<ArrangementMapper, SeckillArrangement>
         implements ArrangementService {
-
-    public List<SeckillArrangement> getArrangementList(LocalDateTime fromTime, LocalDateTime endTime){
-        return this.lambdaQuery()
-                .ge(SeckillArrangement::getStartTime, fromTime)
-                .le(SeckillArrangement::getStartTime, endTime)
-                .list();
+    @Override
+    public List<SeckillArrangement> getByStarEndTime(LocalDateTime startTime, LocalDateTime endTime) {
+        return null;
     }
 }

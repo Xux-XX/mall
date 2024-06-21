@@ -52,4 +52,16 @@ public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, S
                 .selectPage(new Page<>(pageNumber, pageSize, false), null)
                 .getRecords();
     }
+
+    @Override
+    public List<String> filter(List<String> texts) {
+        return texts.stream()
+                .filter(text -> !sensitiveTrie.hasSensitive(text))
+                .toList();
+    }
+
+    @Override
+    public boolean hasSensitive(String text) {
+        return sensitiveTrie.hasSensitive(text);
+    }
 }

@@ -1,43 +1,72 @@
 package com.xux.seckill.schedule;
 
+import com.xux.seckill.pojo.constant.RedisConstant;
 import com.xux.seckill.pojo.entity.SeckillArrangement;
 import com.xux.seckill.pojo.entity.SeckillProduct;
 import com.xux.seckill.service.ArrangementService;
 import com.xux.seckill.service.ProductService;
-import com.xux.seckill.util.SeckillUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+/**
+ * @author xux
+ * @version 0.1
+ * @since 2024/6/19 22:23
+ */
 @Component
 @RequiredArgsConstructor
 public class SeckillSchedule {
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ArrangementService arrangementService;
     private final ProductService productService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ZoneId zoneId = ZoneId.of("GMT+8");
+
     /**
-     * 每天晚上一点执行，将接下来三天的秒杀商品载入缓存
+     * 每天晚上2点,把第二天3点内的秒杀信息载入redis中
      */
-    @Scheduled(cron = "0 0 1 * * ？")
-    public void loadProduct2Redis(){
-        LocalDateTime fromTime = LocalDateTime.now();
-        LocalDateTime endTime = LocalDateTime.now().plusDays(3);
-        List<SeckillArrangement> arrangements = arrangementService.getArrangementList(fromTime, endTime);
+    @Async
+    @Scheduled(cron = "* * 2 * * ?")
+    public void loadStock(){
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(1).plusHours(1);
+        List<SeckillArrangement> arrangements = arrangementService.getByStarEndTime(start, end);
         for (SeckillArrangement arrangement : arrangements) {
-            List<SeckillProduct> products = productService.getProductsBySeckillId(arrangement.getSeckillId());
+            Instant expireAt = end.plusMinutes(5).atZone(zoneId).toInstant();
+            String seckillKey = RedisConstant.getSeckillKey(arrangement.getSeckillId());
+            // 若存在则跳过
+            // 不存在则创建一个map存入redis
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(seckillKey))) continue;
+            Map<String, Object> map = Map.of(
+                    RedisConstant.START_TIME, arrangement.getStartTime(),
+                    RedisConstant.END_TIME, arrangement.getEndTime()
+            );
+            redisTemplate.opsForHash().putAll(seckillKey, map);
+            redisTemplate.expireAt(seckillKey, expireAt);
+            // 获取库存和购买上限并将其载入redis
+            List<SeckillProduct> products = productService.getBySeckill(arrangement.getSeckillId());
             for (SeckillProduct product : products) {
-                String key = SeckillUtil.getProductKey(arrangement.getSeckillId(), product.getProductId());
-                redisTemplate.opsForHash().putIfAbsent(key, "total", product.getTotal());
-                redisTemplate.opsForHash().putIfAbsent(key, "limit", product.getLimit());
-                redisTemplate.opsForHash().putIfAbsent(key, "start", arrangement.getStartTime());
-                redisTemplate.expireAt(key, arrangement.getEndTime().toInstant(ZoneOffset.UTC));
+                String productKey = RedisConstant.getProductKey(product.getSeckillId(), product.getProductId());
+                if (Boolean.TRUE.equals(redisTemplate.hasKey(productKey))) continue;
+                String limitKey = RedisConstant.getLimitKey(productKey);
+                String stockKey = RedisConstant.getStockKey(productKey);
+                map = Map.of(
+                        limitKey, product.getLimit(),
+                        stockKey, product.getStock()
+                );
+                redisTemplate.opsForValue().multiSet(map);
+                redisTemplate.expireAt(limitKey, expireAt);
+                redisTemplate.expireAt(stockKey, expireAt);
             }
         }
     }
-
 }

@@ -21,4 +21,8 @@ public class User {
 
     @NotBlank(message = "密码不能为空")
     private String password;
+
+    private Integer roleStatus;
+
+    private String phone;
 }

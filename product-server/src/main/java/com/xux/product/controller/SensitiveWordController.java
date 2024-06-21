@@ -1,5 +1,6 @@
 package com.xux.product.controller;
 
+import com.xux.commonWeb.annotation.RequireAdmin;
 import com.xux.core.entity.Result;
 import com.xux.product.pojo.entity.SensitiveWord;
 import com.xux.product.pojo.enums.SensitiveEnum;
@@ -28,6 +29,7 @@ public class SensitiveWordController {
 
     @GetMapping
     @Operation(summary = "查询敏感词")
+    @RequireAdmin
     public Result getWord(@RequestParam("pageNumber") Integer pageNumber,
                           @RequestParam("pageSize") Integer pageSize){
         List<SensitiveWord> data = service.getPage(pageNumber, pageSize);
@@ -36,6 +38,7 @@ public class SensitiveWordController {
 
     @PostMapping
     @Operation(summary = "添加敏感词")
+    @RequireAdmin
     public Result addWord(@RequestBody Map<String, String> word){
         SensitiveEnum state = service.add(word.get("word"));
         if (state == SensitiveEnum.SUCCESS) return Result.ok(state.getMessage());
@@ -44,6 +47,7 @@ public class SensitiveWordController {
 
     @DeleteMapping("{id}")
     @Operation(summary = "删除敏感词")
+    @RequireAdmin
     public Result removeWord(@PathVariable("id") Integer wordId){
         SensitiveEnum state = service.remove(wordId);
         if (state == SensitiveEnum.SUCCESS) return Result.ok(state.getMessage());

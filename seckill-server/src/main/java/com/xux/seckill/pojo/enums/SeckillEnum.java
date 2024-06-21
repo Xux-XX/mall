@@ -1,20 +1,24 @@
 package com.xux.seckill.pojo.enums;
 
+/**
+ * @author xux
+ * @version 0.1
+ * @since 2024/6/20 20:40
+ */
 public enum SeckillEnum {
     SUCCESS("抢购成功"),
-    ERROR("系统异常,请联系管理员"),
-    NOT_START("活动还未开始"),
-    ENDED("活动未开始或已经结束"),
-    LIMIT("您已到达购买上上限"),
-    SOLD_OUT("商品已经被抢光啦");
+    OUT_OF_TIME("未处于秒杀时间段"),
+    LIMIT("超过购买上限"),
+    RETRY("系统繁忙,请重试"),
+    SOLD_OUT("已经被抢光啦");
 
     private final String message;
 
-    SeckillEnum(String message) {
-        this.message = message;
-    }
-
     public String getMessage() {
         return message;
+    }
+
+    SeckillEnum(String message) {
+        this.message = message;
     }
 }

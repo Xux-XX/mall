@@ -22,8 +22,8 @@
 
         <dependency>
             <groupId>com.xux</groupId>
-            <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>common-web</artifactId>
+            <version>${common-web.version}</version>
         </dependency>
     </dependencies>
 </project>

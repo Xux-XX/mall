@@ -3,6 +3,7 @@ package com.xux.gateway.filter;
 import com.alibaba.fastjson2.JSON;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 //import com.xux.core.entity.Result;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.xux.core.entity.Result;
 import com.xux.core.util.JWTUtil;
 import com.xux.redis.util.LoginRedisUtil;
@@ -35,14 +36,17 @@ public class JWTDecodeGatewayFilterFactory implements GatewayFilterFactory<Objec
     public GatewayFilter apply(Object config) {
         return (exchange, chain) -> {
             // 未登录将userId设置为0
-            Integer userId = 0;
+            String userId = "0";
+            String userRole = "0";
             List<String> authorization = exchange.getRequest().getHeaders().get("Authorization");
             if (authorization != null){
                 // 携带了jwt则进行认证
                 String jwt = authorization.get(0);
                 try {
                     // 解析失败或者不存在redis表示token已经过期
-                    userId = jwtUtil.parse(jwt);
+                    DecodedJWT parse = jwtUtil.parse(jwt);
+                    userId = parse.getClaim(JWTUtil.USER_ID).asString();
+                    userRole = parse.getClaim(JWTUtil.ROLE_STATUS).asString();
                     if (redisUtil.hasKey(userId.toString())) throw new TokenExpiredException("", null);
                 }catch (TokenExpiredException e){
                     // jwt过期
@@ -51,9 +55,11 @@ public class JWTDecodeGatewayFilterFactory implements GatewayFilterFactory<Objec
                             .writeWith(toDataBuffer(Result.unAuthorized("身份校验失败,请重新登录")));
                 }
             }
+            // 将解析出来的数据写入请求头传递到下游
             ServerHttpRequest mutateRequest = exchange.getRequest()
                     .mutate()
-                    .header(JWTUtil.USER_ID, String.valueOf(userId))
+                    .header(JWTUtil.USER_ID, userId)
+                    .header(JWTUtil.ROLE_STATUS, userRole)
                     .build();
             ServerWebExchange mutateExchange = exchange.mutate().request(mutateRequest).build();
             return chain.filter(mutateExchange);

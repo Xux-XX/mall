@@ -8,13 +8,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author xux
+ * @version 0.1
+ * @since 2024/6/19 22:21
+ */
 @Service
-public class ProductServiceImpl extends ServiceImpl<ProductMapper, SeckillProduct>
-        implements ProductService {
+public class ProductServiceImpl extends ServiceImpl<ProductMapper, SeckillProduct> implements ProductService {
     @Override
-    public List<SeckillProduct> getProductsBySeckillId(Integer seckillId) {
+    public List<SeckillProduct> getBySeckill(Integer seckillId) {
         return this.lambdaQuery()
                 .eq(SeckillProduct::getSeckillId, seckillId)
                 .list();
+    }
+
+    @Override
+    public SeckillProduct getProduct(Integer seckillId, Integer productId) {
+        return this.lambdaQuery()
+                .eq(SeckillProduct::getSeckillId, seckillId)
+                .eq(SeckillProduct::getProductId, productId)
+                .one();
     }
 }

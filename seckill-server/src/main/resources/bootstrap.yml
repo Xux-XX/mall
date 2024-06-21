@@ -1,11 +1,15 @@
+server:
+  port: 8002
 spring:
   application:
-    name: seckill_server
+    name: seckill-server
+  profiles:
+    active: dev
   cloud:
     nacos:
       server-addr: 192.168.88.128:8848
       config:
         group: DEFAULT_GROUP
-        namespace: 9476427b-f046-4b92-a8a6-d9b4a3587e8e # dev环境
+        namespace: ${spring.profiles.active}
+        file-extension: yml
         shared-configs: common.yml
-

@@ -21,6 +21,8 @@
         <module>gateway-server</module>
         <module>product-server</module>
         <module>common</module>
+        <module>file-server</module>
+        <module>seckill-server</module>
     </modules>
     <properties>
         <java.version>17</java.version>

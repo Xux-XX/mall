@@ -1,7 +1,7 @@
 package com.xux.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xux.common.context.UserContext;
+import com.xux.commonWeb.context.UserContext;
 import com.xux.core.util.JWTUtil;
 import com.xux.user.mapper.UserMapper;
 import com.xux.user.pojo.entity.User;
@@ -34,7 +34,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user == null) return LoginStatus.FAIL;
         //返回jwt并存入redis
         LoginStatus success = LoginStatus.SUCCESS;
-        String jwt = jwtUtil.createJWT(user.getUserId());
+        String jwt = jwtUtil.createJWT(user.getUserId(), user.getRoleStatus());
         success.setData(jwt);
         redisUtil.set(user.getUserId().toString(), jwt);
         return success;
@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public void logout() {
         // 将redis中jwt删除
-        Integer userId = UserContext.get();
+        Integer userId = UserContext.get().getUserId();
         redisUtil.remove(userId.toString());
     }
 }

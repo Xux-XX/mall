@@ -1,9 +1,12 @@
 package com.xux.product.controller;
 
+import com.xux.commonWeb.annotation.PreAuthorization;
+import com.xux.commonWeb.annotation.RequireLogin;
+import com.xux.core.entity.Result;
 import com.xux.product.pojo.entity.Comment;
 import com.xux.product.pojo.enums.CommentEnum;
+import com.xux.product.pojo.enums.CommentOrderBy;
 import com.xux.product.service.CommentService;
-import com.xux.utilCommon.entity.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +30,9 @@ public class CommentController {
     @Operation(summary = "根据店铺id获取评论")
     public Result getCommentByStore(@PathVariable("storeId") Integer storeId,
                                     @RequestParam("pageNumber") Integer pageNumber,
-                                    @RequestParam("pageSize") Integer pageSize){
-        List<Comment> data = commentService.getByStoreId(storeId, pageNumber, pageSize);
+                                    @RequestParam("pageSize") Integer pageSize,
+                                    @RequestParam(name = "orderBy", defaultValue = "DEFAULT") CommentOrderBy orderBy){
+        List<Comment> data = commentService.getByStoreId(storeId, pageNumber, pageSize, orderBy);
         return Result.ok("查询成功", data);
     }
 
@@ -43,15 +47,16 @@ public class CommentController {
 
     @PostMapping
     @Operation(summary = "新增评论")
+    @RequireLogin
     public Result addComment(@RequestBody Comment comment){
         CommentEnum status = commentService.addComment(comment);
         if (status == CommentEnum.SUCCESS) return Result.ok(status.getMessage());
         return Result.fail(status.getMessage());
     }
 
-    // TODO: 2024/6/11 权限校验
     @DeleteMapping
     @Operation(summary = "删除评论")
+    @PreAuthorization("commentService.isCreator")
     public Result removeComment(Integer commentId){
         commentService.removeComment(commentId);
         return Result.ok();

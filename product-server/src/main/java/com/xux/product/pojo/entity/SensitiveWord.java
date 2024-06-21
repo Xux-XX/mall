@@ -3,7 +3,7 @@ package com.xux.product.pojo.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xux.common.entity.BaseEntity;
+import com.xux.commonWeb.pojo.entity.BaseEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

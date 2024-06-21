@@ -64,6 +64,27 @@ public class Trie {
     }
 
     /**
+     * 判断文本中是否包含敏感词
+     * @param text 待判断文本
+     * @return true 包含敏感词
+     *      <p>false 不包含敏感词
+     */
+    public boolean hasSensitive(String text){
+        Node now = root;
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (!now.next.containsKey(ch)){
+                now = now.fail;
+                continue;
+            }
+            // 匹配成功进入下一个状态
+            now = now.next.get(ch);
+            if (now.length != 0) return true;
+        }
+        return false;
+    }
+
+    /**
      * 添加敏感词, 并更新fail指针, 若该词已经存在则不做任何操作
      * @param word 敏感词
      */
@@ -137,24 +158,6 @@ public class Trie {
         }
 
     }
-
-    /**
-     * 判断word是否为已经载入的敏感词
-     * @param word 待判断词
-     * @return true存在, false不存在
-     */
-    public boolean exists(String word) {
-        Node now = root;
-        for (int i = 0; i < word.length(); i++){
-            char ch = word.charAt(i);
-            // 若不存在下一个状态则匹配失败
-            if ((now = now.next.get(ch)) == null){
-                return false;
-            }
-        }
-        return now.length == 0;
-    }
-
 
     /**
      * 载入敏感词库,并初始化fail指针
