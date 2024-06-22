@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
  * @version 0.1
  * @since 2024/6/19 22:22
  */
-@Service
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class SeckillServiceImpl implements SeckillService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedissonClient redissonClient;
@@ -67,8 +67,8 @@ public class SeckillServiceImpl implements SeckillService {
         if (!now.isBefore(end) || !now.isAfter(begin)) return SeckillEnum.OUT_OF_TIME;
 
         // 3. 对redis中user的key进行加锁,判断用户购买数量是否超过限制,超过限制返回LIMIT
-        String userKey = RedisConstant.getUserKey(seckillId, productId, UserContext.get().getUserId());
         String productKey = RedisConstant.getProductKey(seckillId, productId);
+        String userKey = RedisConstant.getUserKey(productKey, UserContext.get().getUserId());
         Integer limit = (Integer) redisTemplate.opsForValue().get(RedisConstant.getLimitKey(productKey));
         RLock userLock = redissonClient.getLock(RedisConstant.getUserLockKey(userKey));
         boolean isLock = userLock.tryLock(USER_WAIT_TIME, TIME_UNIT);

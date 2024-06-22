@@ -1,0 +1,96 @@
+package com.xux.seckill.service.impl;
+
+import com.alibaba.fastjson2.JSON;
+import com.xux.commonWeb.context.UserContext;
+import com.xux.seckill.pojo.constant.RedisConstant;
+import com.xux.seckill.pojo.entity.SeckillMessage;
+import com.xux.seckill.pojo.enums.SeckillEnum;
+import com.xux.seckill.service.SeckillService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.List;
+
+/**
+ * @author xux
+ * @version 0.1
+ * @since 2024/6/22 19:31
+ */
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class LuaSeckillServiceImpl implements SeckillService {
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final RabbitTemplate rabbitTemplate;
+    private final String EXCHANGE_NAME = "mall_exchange";
+    private final String ROUTE_KEY = "seckill";
+    private final String SECKILL_SCRIPT =
+        """
+        --判断是否处于秒杀时间段
+        local seckillKey = KEYS[1]
+        if not redis.call('EXISTS', seckillKey) then
+            return 1
+        end
+        local nowTime = tonumber(ARGV[1])
+        local beginTime = tonumber(redis.call('HGET', seckillKey, 'startTime'))
+        local endTime = tonumber(redis.call('HGET', seckillKey, 'endTime'))
+        if nowTime < beginTime or nowTime > endTime then
+            return 1
+        end
+        --判断是否到达购买上限
+        local userKey = KEYS[2]
+        local limitKey = KEYS[3]
+        local maxCount = tonumber(redis.call('GET', limitKey))
+        local buyCount = tonumber(ARGV[2])
+        local currentCount = tonumber(redis.call('GET', userKey) or '0')
+        if currentCount + buyCount > maxCount then
+            return 2
+        end
+        --判断库存是否足够
+        local stockKey = KEYS[4]
+        local stock = tonumber(redis.call('GET', stockKey) or '0')
+        if stock < buyCount then
+            return 3
+        end
+        --更新库存
+        redis.call('INCRBY', userKey, buyCount)
+        redis.call('DECRBY', stockKey, buyCount)
+        
+        return 0
+        """;
+
+
+    /**
+     * 使用lua脚本完成秒杀流程，
+     * 秒杀成功将信息发送给mq进行后续处理
+     * 如：创建订单等操作
+     */
+    @Override
+    public SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number) {
+        String seckillKey = RedisConstant.getSeckillKey(seckillId);
+        String productKey = RedisConstant.getProductKey(seckillId, productId);
+        String stockKey = RedisConstant.getStockKey(productKey);
+        String userKey = RedisConstant.getUserKey(productKey, UserContext.get().getUserId());
+        String limitKey = RedisConstant.getLimitKey(productKey);
+
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(SECKILL_SCRIPT, Long.class);
+        List<String> keys = List.of(seckillKey, userKey, limitKey, stockKey);
+        Long index = redisTemplate.execute(redisScript, keys, Instant.now().toEpochMilli(), number);
+        SeckillEnum status = SeckillEnum.values()[Math.toIntExact(index)];
+        if (status == SeckillEnum.SUCCESS){
+            log.info("用户{}抢购成功", UserContext.get());
+            SeckillMessage message = SeckillMessage.builder()
+                    .userId(UserContext.get().getUserId())
+                    .productId(productId)
+                    .number(number)
+                    .build();
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, JSON.toJSON(message));
+        }
+        return status;
+    }
+}

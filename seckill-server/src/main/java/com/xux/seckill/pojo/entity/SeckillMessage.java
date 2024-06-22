@@ -13,4 +13,5 @@ import lombok.Data;
 public class SeckillMessage {
     private Integer userId;
     private Integer productId;
+    private Integer number;
 }
