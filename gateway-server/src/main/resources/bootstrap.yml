@@ -11,3 +11,6 @@ spring:
       config:
         namespace: ${spring.profiles.active}
         file-extension: yml
+        shared-configs:
+          - common.yml
+          - jwt.yml

@@ -5,7 +5,6 @@ import com.xux.seckill.mapper.ArrangementMapper;
 import com.xux.seckill.pojo.entity.SeckillArrangement;
 import com.xux.seckill.service.ArrangementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,9 @@ import java.util.List;
 public class ArrangementServiceImpl extends ServiceImpl<ArrangementMapper, SeckillArrangement>
         implements ArrangementService {
     @Override
-    public List<SeckillArrangement> getByStarEndTime(LocalDateTime startTime, LocalDateTime endTime) {
-        return null;
+    public List<SeckillArrangement> getByStarTime(LocalDateTime startTime) {
+        return this.lambdaQuery()
+                .ge(SeckillArrangement::getStartTime, startTime)
+                .list();
     }
 }

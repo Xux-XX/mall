@@ -11,5 +11,5 @@ import java.util.List;
  * @since 2024/6/19 21:10
  */
 public interface ArrangementService {
-    List<SeckillArrangement> getByStarEndTime(LocalDateTime startTime, LocalDateTime endTime);
+    List<SeckillArrangement> getByStarTime(LocalDateTime startTime);
 }

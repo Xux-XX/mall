@@ -25,7 +25,7 @@ public class SeckillArrangement extends BaseEntity {
     /**
      * 秒杀标题
      */
-    private Integer title;
+    private String title;
     /**
      * 描述
      */

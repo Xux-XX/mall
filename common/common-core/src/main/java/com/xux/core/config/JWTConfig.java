@@ -1,8 +1,10 @@
 package com.xux.core.config;
 
+import com.xux.core.property.JWTProperties;
 import com.xux.core.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -10,13 +12,11 @@ import org.springframework.context.annotation.Bean;
  * @version 0.1
  * @since 2024/6/16 21:25
  */
-
+@EnableConfigurationProperties(JWTProperties.class)
+@ConditionalOnProperty("jwt.enable")
 public class JWTConfig {
     @Bean
-    @ConditionalOnProperty(name = "jwt")
-    public JWTUtil jwtUtil(@Value("${jwt.sign}")String sign,
-                           @Value("${jwt.zone-id}")String zoneId,
-                           @Value("${jwt.expire}")int expire){
-        return new JWTUtil(sign, expire, zoneId);
+    public JWTUtil jwtUtil(JWTProperties properties){
+        return new JWTUtil(properties.getSign(), properties.getExpire(), properties.getZoneId());
     }
 }

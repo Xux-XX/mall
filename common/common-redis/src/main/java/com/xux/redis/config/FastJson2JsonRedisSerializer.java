@@ -29,6 +29,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
     @Override
     public T deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null) return null;
         String jsonString = new String(bytes, DEFAULT_CHARSET);
         return JSON.parseObject(jsonString, clazz, JSONReader.Feature.SupportArrayToBean);
     }

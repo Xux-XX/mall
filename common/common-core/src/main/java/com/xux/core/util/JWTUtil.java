@@ -49,8 +49,8 @@ public class JWTUtil {
     public String createJWT(Integer userId, Integer roleStatus){
         Algorithm algorithm = Algorithm.HMAC256(sign);
         return JWT.create()
-                .withClaim(USER_ID, userId)
-                .withClaim(ROLE_STATUS, roleStatus)
+                .withClaim(USER_ID, userId.toString())
+                .withClaim(ROLE_STATUS, roleStatus.toString())
                 .withExpiresAt(getExpire())
                 .sign(algorithm);
     }

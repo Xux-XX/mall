@@ -18,18 +18,18 @@ public class LoginRedisUtil {
     @Value("${spring.data.redis.default-expire}")
     private Integer expire;
 
-    private final String prefix = "user:";
+    private final String prefix = "login:";
 
     public void set(String key, String value){
         redisTemplate.opsForValue().set(prefix + key, value, expire, TimeUnit.HOURS);
     }
 
     public String get(String key){
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(prefix + key);
     }
 
     public void remove(String key){
-        redisTemplate.delete(key);
+        redisTemplate.delete(prefix + key);
     }
 
     public Boolean hasKey(String key){

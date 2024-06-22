@@ -8,5 +8,5 @@ import com.xux.seckill.pojo.enums.SeckillEnum;
  * @since 2024/6/19 21:10
  */
 public interface SeckillService {
-    public SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number) throws InterruptedException;
+    public SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number);
 }

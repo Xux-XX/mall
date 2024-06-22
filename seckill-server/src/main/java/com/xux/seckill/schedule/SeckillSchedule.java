@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author xux
@@ -34,21 +33,20 @@ public class SeckillSchedule {
     /**
      * 每天晚上2点,把第二天3点内的秒杀信息载入redis中
      */
-    @Async
+//    @Async
     @Scheduled(cron = "* * 2 * * ?")
-    public void loadStock(){
+    public void load2Redis(){
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(1).plusHours(1);
-        List<SeckillArrangement> arrangements = arrangementService.getByStarEndTime(start, end);
+        List<SeckillArrangement> arrangements = arrangementService.getByStarTime(start);
         for (SeckillArrangement arrangement : arrangements) {
-            Instant expireAt = end.plusMinutes(5).atZone(zoneId).toInstant();
+            Instant expireAt = arrangement.getEndTime().plusMinutes(5).atZone(zoneId).toInstant();
             String seckillKey = RedisConstant.getSeckillKey(arrangement.getSeckillId());
             // 若存在则跳过
             // 不存在则创建一个map存入redis
             if (Boolean.TRUE.equals(redisTemplate.hasKey(seckillKey))) continue;
             Map<String, Object> map = Map.of(
-                    RedisConstant.START_TIME, arrangement.getStartTime(),
-                    RedisConstant.END_TIME, arrangement.getEndTime()
+                    RedisConstant.START_TIME, arrangement.getStartTime().atZone(zoneId).toInstant().toEpochMilli(),
+                    RedisConstant.END_TIME, arrangement.getEndTime().atZone(zoneId).toInstant().toEpochMilli()
             );
             redisTemplate.opsForHash().putAll(seckillKey, map);
             redisTemplate.expireAt(seckillKey, expireAt);

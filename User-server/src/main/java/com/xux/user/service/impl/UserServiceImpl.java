@@ -36,6 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         LoginStatus success = LoginStatus.SUCCESS;
         String jwt = jwtUtil.createJWT(user.getUserId(), user.getRoleStatus());
         success.setData(jwt);
+        redisUtil.remove(user.getUserId().toString());
         redisUtil.set(user.getUserId().toString(), jwt);
         return success;
     }
