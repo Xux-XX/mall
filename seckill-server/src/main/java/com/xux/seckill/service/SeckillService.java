@@ -15,5 +15,5 @@ public interface SeckillService {
      * @param number 秒杀数目
      * @return SeckillEnum
      */
-    public SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number);
+    SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number);
 }

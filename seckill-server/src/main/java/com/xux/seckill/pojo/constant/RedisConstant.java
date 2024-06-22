@@ -26,9 +26,6 @@ public class RedisConstant {
     public static String getUserLockKey(String userKey){
         return userKey + ":lock";
     }
-    public static String getLimitKey(Integer seckillId, Integer productId){
-        return getProductKey(seckillId, productId) + ":" + LIMIT;
-    }
     public static String getLimitKey(String productKey){
         return productKey + ":" + LIMIT;
     }
