@@ -6,4 +6,4 @@
 
 - 完善秒杀模块：监听rabbitmq创建订单，订单超时通过rabbitmq加库存
 - 使用BinLog配合mq完成数据库和缓存的最终一致性
-- 使用Redis中zset数据结构实现商品销量排行榜功能
+- *使用Redis中zset数据结构实现商品销量排行榜功能

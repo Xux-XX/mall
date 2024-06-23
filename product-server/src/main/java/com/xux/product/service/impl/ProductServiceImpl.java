@@ -1,5 +1,7 @@
 package com.xux.product.service.impl;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xux.product.mapper.ProductMapper;
 import com.xux.product.pojo.dto.ProductUpdateDTO;
@@ -20,53 +22,58 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         implements ProductService {
 
     @Override
-    public boolean exists(Integer productId) {
-        return false;
-    }
-
-    @Override
     public boolean exists(Integer productId, Integer storeId) {
-        return false;
+        return this.lambdaQuery()
+                .eq(Product::getProductId, productId)
+                .eq(Product::getStoreId, storeId)
+                .exists();
     }
 
     @Override
     public void addProduct(Product product) {
-
+        product.setSales(0);
+        this.save(product);
     }
 
     @Override
-    public void removeById(Integer productId) {
-
+    public void remove(Integer productId) {
+        this.removeById(productId);
     }
 
     @Override
     public List<Product> getByNameLike(String productName, Integer pageNumber, Integer pageSize, ProductOrderBy orderBy) {
-        return null;
+        LambdaQueryChainWrapper<Product> query = this.lambdaQuery()
+                .like(Product::getName, productName);
+        orderBy.decorateWrapper(query);
+        return query.page(new Page<>(pageNumber, pageSize)).getRecords();
     }
 
     @Override
-    public Product getById(Integer productId) {
-        return null;
-    }
-
-    @Override
-    public List<Product> getByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, ProductOrderBy orderBy) {
-        return null;
+    public Product getProductById(Integer productId) {
+        return this.getById(productId);
     }
 
     @Override
     public List<Product> getByStore(Integer storeId, Integer pageNumber, Integer pageSize, ProductOrderBy orderBy) {
-        return null;
+        LambdaQueryChainWrapper<Product> query = this.lambdaQuery().eq(Product::getStoreId, storeId);
+        orderBy.decorateWrapper(query);
+        return query.page(new Page<>(pageNumber, pageSize)).getRecords();
     }
 
     @Override
     public List<Product> getOutOfStock(Integer pageNumber, Integer pageSize) {
-        return null;
+        return this.lambdaQuery()
+                .eq(Product::getStock, 0)
+                .page(new Page<>(pageNumber, pageSize))
+                .getRecords();
     }
 
     @Override
     public void increaseStock(Integer increment, Integer productId) {
-
+        this.lambdaUpdate()
+                .eq(Product::getProductId, productId)
+                .setSql("set stock = stock + ", increment)
+                .update();
     }
 
     @Override

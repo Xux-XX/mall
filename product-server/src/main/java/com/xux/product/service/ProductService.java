@@ -14,13 +14,6 @@ import java.util.List;
  */
 public interface ProductService {
     /**
-     * 是否存在商品
-     * @param productId 商品id
-     * @return boolean
-     */
-    boolean exists(Integer productId);
-
-    /**
      * 在指定商铺是否存在指定商品
      * @param productId 商品id
      * @param storeId 店铺id
@@ -39,7 +32,7 @@ public interface ProductService {
      * @param productId 商品id
      * @throws ProductNotFoundException 商品id不存在或已经被删除时抛出
      */
-    void removeById(Integer productId);
+    void remove(Integer productId);
 
     /**
      * 通过商品名字模糊搜索商品
@@ -56,16 +49,7 @@ public interface ProductService {
      * @return Product
      * @throws ProductNotFoundException 商品id不存在或被删除时抛出
      */
-    Product getById(Integer productId);
-
-    /**
-     * 通过分类获取商品
-     * @param categoryId 分类id
-     * @param pageNumber 页号
-     * @param pageSize 页大小
-     * @return List<Product>
-     */
-    List<Product> getByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, ProductOrderBy orderBy);
+    Product getProductById(Integer productId);
 
     /**
      * 通过店铺获取商品
@@ -94,7 +78,7 @@ public interface ProductService {
     void increaseStock(Integer increment, Integer productId);
 
     /**
-     * 修改商品价格
+     * 修改商品信息
      * @param productUpdateDTO 包含商品id和需要更新的数据(名称、描述、价格、分类、库存、图片、状态)
      * @throws ProductNotFoundException 商品id不存在或被删除时抛出
      */

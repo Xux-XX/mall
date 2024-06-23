@@ -37,6 +37,7 @@
         <common-web.version>0.0.1-SNAPSHOT</common-web.version>
         <common-core.version>0.0.1-SNAPSHOT</common-core.version>
         <common-redis.version>0.0.1-SNAPSHOT</common-redis.version>
+        <common-rabbitmq.version>0.0.1-SNAPSHOT</common-rabbitmq.version>
     </properties>
 
     <dependencyManagement>

@@ -22,55 +22,42 @@ public class Product extends BaseEntity {
      */
     @TableId(type = IdType.AUTO)
     private Integer productId;
-
     /**
      * 所属店铺id
      */
     private Integer storeId;
-
-    /**
-     * 分类
-     */
-    @NotBlank
-    private Integer categoryId;
-
     /**
      * 商品描述
      */
     @NotBlank
     private String description;
-
     /**
      * 商品名称
      */
     @NotBlank
     private String name;
-
     /**
      * 库存
      */
     private Integer stock;
-
     /**
      * 价格
      */
     private Double price;
-
     /**
      * 图片URL
      */
+    @NotBlank
     private String picture;
-
     /**
      * 销量
      */
     private Integer sales;
-
     /**
      * 状态:
      *  1. 是否发布
      *  2. 是否为推荐商品
- *      3. 是否为新商品
+     *  3. 是否为新商品
      */
     private Integer status;
 

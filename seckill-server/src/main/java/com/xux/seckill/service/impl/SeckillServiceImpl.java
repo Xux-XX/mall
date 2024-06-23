@@ -1,10 +1,9 @@
 package com.xux.seckill.service.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.xux.commonWeb.context.UserContext;
-import com.xux.seckill.pojo.entity.SeckillMessage;
-import com.xux.seckill.pojo.enums.SeckillEnum;
+import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.seckill.pojo.constant.RedisConstant;
+import com.xux.seckill.pojo.enums.SeckillEnum;
 import com.xux.seckill.service.SeckillService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -35,7 +34,7 @@ public class SeckillServiceImpl implements SeckillService {
     private final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
     private final RabbitTemplate rabbitTemplate;
     private final String EXCHANGE_NAME = "mall_exchange";
-    private final String ROUTE_KEY = "seckill";
+    private final String ROUTE_KEY = "seckill.order";
 
     /**
      *
@@ -94,11 +93,8 @@ public class SeckillServiceImpl implements SeckillService {
             if (stock <= 0) return SeckillEnum.SOLD_OUT;
             redisTemplate.opsForValue().decrement(stockKey, number);
             redisTemplate.opsForValue().increment(userKey, number);
-            SeckillMessage message = SeckillMessage.builder().
-                    userId(UserContext.get().getUserId()).
-                    productId(productId)
-                    .build();
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, JSON.toJSON(message));
+            OrderMessage message = new OrderMessage(UserContext.get().getUserId(), productId, number);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
 
         }finally {
             productLock.unlock();

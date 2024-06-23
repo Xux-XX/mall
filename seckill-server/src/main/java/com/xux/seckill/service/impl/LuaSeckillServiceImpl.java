@@ -1,9 +1,8 @@
 package com.xux.seckill.service.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.xux.commonWeb.context.UserContext;
+import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.seckill.pojo.constant.RedisConstant;
-import com.xux.seckill.pojo.entity.SeckillMessage;
 import com.xux.seckill.pojo.enums.SeckillEnum;
 import com.xux.seckill.service.SeckillService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class LuaSeckillServiceImpl implements SeckillService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RabbitTemplate rabbitTemplate;
     private final String EXCHANGE_NAME = "mall_exchange";
-    private final String ROUTE_KEY = "seckill";
+    private final String ROUTE_KEY = "seckill.order.create";
     private final String SECKILL_SCRIPT =
         """
         --判断是否处于秒杀时间段
@@ -83,13 +82,9 @@ public class LuaSeckillServiceImpl implements SeckillService {
         Long index = redisTemplate.execute(redisScript, keys, Instant.now().toEpochMilli(), number);
         SeckillEnum status = SeckillEnum.values()[Math.toIntExact(index)];
         if (status == SeckillEnum.SUCCESS){
-            log.info("用户{}抢购成功", UserContext.get());
-            SeckillMessage message = SeckillMessage.builder()
-                    .userId(UserContext.get().getUserId())
-                    .productId(productId)
-                    .number(number)
-                    .build();
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, JSON.toJSON(message));
+            log.info("用户{}抢购成功:商品id为{}", UserContext.get(), productId);
+            OrderMessage message = new OrderMessage(UserContext.get().getUserId(), productId, number);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
         }
         return status;
     }
