@@ -13,7 +13,8 @@ public interface SeckillService {
      * @param seckillId 秒杀场次id
      * @param productId 秒杀商品id
      * @param number 秒杀数目
+     * @param addressId 地址id(用于创建订单)
      * @return SeckillEnum
      */
-    SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number);
+    SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number, Integer addressId);
 }

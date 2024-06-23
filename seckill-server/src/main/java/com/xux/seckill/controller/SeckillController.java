@@ -26,8 +26,9 @@ public class SeckillController {
     @Operation(summary = "秒杀商品")
     public Result doSeckill(@PathVariable Integer seckillId,
                             @PathVariable Integer productId,
-                            @RequestParam("number") Integer number){
-        SeckillEnum status = seckillService.doSeckill(seckillId, productId, number);
+                            @RequestParam("number") Integer number,
+                            @RequestParam("addressId") Integer addressId){
+        SeckillEnum status = seckillService.doSeckill(seckillId, productId, number, addressId);
         if (status == SeckillEnum.SUCCESS) return Result.ok(status.getMessage());
         return Result.fail(status.getMessage());
     }

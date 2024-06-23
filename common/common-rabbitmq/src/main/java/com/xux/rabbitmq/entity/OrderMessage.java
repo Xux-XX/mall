@@ -26,4 +26,8 @@ public class OrderMessage {
      * 购买数量
      */
     private Integer number;
+    /**
+     * 地址id
+     */
+    private Integer addressId;
 }

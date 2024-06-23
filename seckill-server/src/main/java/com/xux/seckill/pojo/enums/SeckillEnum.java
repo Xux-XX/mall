@@ -10,7 +10,7 @@ public enum SeckillEnum {
     OUT_OF_TIME("未处于秒杀时间段"),
     LIMIT("超过购买上限"),
     SOLD_OUT("已经被抢光啦"),
-    RETRY("系统繁忙,请重试");
+    ERROR_ARG("参数异常");
 
     private final String message;
 
