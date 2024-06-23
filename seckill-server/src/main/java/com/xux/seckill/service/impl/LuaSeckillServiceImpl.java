@@ -1,9 +1,9 @@
 package com.xux.seckill.service.impl;
 
 import com.xux.commonWeb.context.UserContext;
+import com.xux.feign.api.AddressFeignClient;
 import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.rabbitmq.util.MessageUtil;
-import com.xux.seckill.feign.AddressFeignClient;
 import com.xux.seckill.pojo.constant.RedisConstant;
 import com.xux.seckill.pojo.enums.SeckillEnum;
 import com.xux.seckill.service.SeckillService;
@@ -75,7 +75,7 @@ public class LuaSeckillServiceImpl implements SeckillService {
     @Override
     public SeckillEnum doSeckill(Integer seckillId, Integer productId, Integer number, Integer addressId) {
         // 校验参数是否合法
-        Boolean isExists = (Boolean) addressFeignClient.exists(addressId).getData();
+        Boolean isExists = addressFeignClient.exists(addressId);
         if (!isExists) return SeckillEnum.ERROR_ARG;
 
         // 准备好需要的参数

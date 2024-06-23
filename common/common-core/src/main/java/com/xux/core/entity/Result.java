@@ -1,6 +1,8 @@
 package com.xux.core.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author xux
@@ -8,16 +10,12 @@ import lombok.Data;
  * @since 2024/6/15 19:48
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Result {
-    private final Integer code;
-    private final String message;
-    private final Object data;
-
-    private Result(Integer code, String message, Object data) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
+    private Integer code;
+    private String message;
+    private Object data;
 
     public static Result ok(){return new Result(200, "操作成功", null);}
     public static Result ok(String message){return new Result(200, message, null);}

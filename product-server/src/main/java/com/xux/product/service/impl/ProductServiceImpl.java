@@ -3,11 +3,14 @@ package com.xux.product.service.impl;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xux.feign.api.AddressFeignClient;
 import com.xux.product.mapper.ProductMapper;
 import com.xux.product.pojo.dto.ProductUpdateDTO;
 import com.xux.product.pojo.entity.Product;
 import com.xux.product.pojo.enums.ProductOrderBy;
 import com.xux.product.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +21,11 @@ import java.util.List;
  * @since 2024/6/12 21:33
  */
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         implements ProductService {
+    private final AddressFeignClient addressFeignClient;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public boolean exists(Integer productId, Integer storeId) {
@@ -78,6 +84,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
     @Override
     public void update(ProductUpdateDTO productUpdateDTO) {
-
+        // TODO 待实现
     }
 }

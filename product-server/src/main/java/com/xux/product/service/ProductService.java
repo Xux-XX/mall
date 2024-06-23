@@ -83,6 +83,4 @@ public interface ProductService {
      * @throws ProductNotFoundException 商品id不存在或被删除时抛出
      */
     void update(ProductUpdateDTO productUpdateDTO);
-
-
 }

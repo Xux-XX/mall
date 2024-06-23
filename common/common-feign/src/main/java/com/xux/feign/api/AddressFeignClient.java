@@ -1,6 +1,6 @@
-package com.xux.seckill.feign;
+package com.xux.feign.api;
 
-import com.xux.core.entity.Result;
+import com.xux.feign.entity.Address;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * @author xux
  * @version 0.1
- * @since 2024/6/23 17:38
+ * @since 2024/6/23 20:21
  */
-@FeignClient
+@FeignClient(name = "user-server")
 public interface AddressFeignClient {
+    @GetMapping("/address/{addressId}")
+    Address getById(@PathVariable("addressId") Integer addressId);
+
     @GetMapping("/address/exists/{addressId}")
-    Result exists(@PathVariable("addressId") Integer addressId);
+    Boolean exists(@PathVariable("addressId") Integer addressId);
 }

@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
  * @since 2024/6/23 15:20
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OrderMessage {
+    /**
+     * 消息id，用于保证幂等性
+     */
+    private Long messageId;
     /**
      * 用户id
      */
