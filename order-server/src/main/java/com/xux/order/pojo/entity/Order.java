@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xux.commonWeb.pojo.entity.BaseEntity;
+import com.xux.feign.entity.Address;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.BeanUtils;
 
 /**
  * @author xux
@@ -65,4 +67,11 @@ public class Order extends BaseEntity {
      * 收货地址(省)
      */
     private String consigneeDetailAddress;
+
+    /**
+     * 设置地址相关属性
+     */
+    public void setAddress(Address address){
+        BeanUtils.copyProperties(address, this);
+    }
 }

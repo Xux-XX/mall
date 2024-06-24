@@ -21,7 +21,6 @@ public interface OrderService {
     /**
      * 使用多个商品创建订单
      * @param createOrderDto 创建订单所需信息
-     * @return CreateOrderEnum
      */
-    CreateOrderEnum createByProductList(CreateOrderDto createOrderDto);
+    void createByProductList(CreateOrderDto createOrderDto);
 }

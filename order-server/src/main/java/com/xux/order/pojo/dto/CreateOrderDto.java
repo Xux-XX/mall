@@ -14,4 +14,5 @@ import java.util.List;
 public class CreateOrderDto {
     private Integer addressId;
     List<ProductDto> productList;
+    private String note;
 }
