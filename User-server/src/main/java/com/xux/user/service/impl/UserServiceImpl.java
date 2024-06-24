@@ -32,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .one();
         // 没查到说明账号或密码错误
         if (user == null) return LoginStatus.FAIL;
-        //返回jwt并存入redis
+        //若该user已经登录，移除redis中的token,然后执行登录逻辑返回jwt并存入redis
         LoginStatus success = LoginStatus.SUCCESS;
         String jwt = jwtUtil.createJWT(user.getUserId(), user.getRoleStatus());
         success.setData(jwt);
