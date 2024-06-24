@@ -93,7 +93,7 @@ public class LuaSeckillServiceImpl implements SeckillService {
         if (status == SeckillEnum.SUCCESS){
             log.info("用户{}抢购成功:商品id为{}", UserContext.get(), productId);
             OrderMessage message = new OrderMessage();
-            message.setMessageId(MessageUtil.randomMessageId());
+            message.setMessageId(MessageUtil.snowflakeId());
             message.setNumber(number);
             message.setUserId(UserContext.get().getUserId());
             message.setAddressId(addressId);

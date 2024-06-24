@@ -1,5 +1,6 @@
 package com.xux.product.service;
 
+import com.xux.feign.dto.BuyProductDto;
 import com.xux.product.exception.ProductNotFoundException;
 import com.xux.product.pojo.dto.ProductUpdateDTO;
 import com.xux.product.pojo.entity.Product;
@@ -83,4 +84,18 @@ public interface ProductService {
      * @throws ProductNotFoundException 商品id不存在或被删除时抛出
      */
     void update(ProductUpdateDTO productUpdateDTO);
+
+    /**
+     * 批量增加商品的销量
+     * @param buyProductDtoList 包含商品id和购买的数量number
+     */
+    void increaseSaleBatch(List<BuyProductDto> buyProductDtoList);
+
+    /**
+     * 通过销量排行获取商品
+     * @param rankL 最小排名(从1开始)
+     * @param rankR 最大排名(从1开始)
+     * @return List<Product>
+     */
+    List<Product> getBySaleRank(Integer rankL, Integer rankR);
 }

@@ -1,11 +1,9 @@
 package com.xux.feign.api;
 
+import com.xux.feign.dto.BuyProductDto;
 import com.xux.feign.entity.Product;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,4 +21,7 @@ public interface ProductFeignClient {
 
     @GetMapping("/product")
     List<Product> getByIdBatch(@RequestParam("ids") List<Integer> productId);
+
+    @PostMapping("/product/buy")
+    void HasBuyProduct(@RequestBody List<BuyProductDto> buyProductDtoList);
 }

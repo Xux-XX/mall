@@ -24,11 +24,5 @@
             <artifactId>common-web</artifactId>
             <version>${common-web.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.xux</groupId>
-            <artifactId>common-rabbitmq</artifactId>
-            <version>${common-rabbitmq.version}</version>
-        </dependency>
     </dependencies>
 </project>

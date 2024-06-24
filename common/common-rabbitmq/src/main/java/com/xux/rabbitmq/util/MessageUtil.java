@@ -2,6 +2,8 @@ package com.xux.rabbitmq.util;
 
 import java.time.Instant;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author xux
@@ -9,11 +11,11 @@ import java.util.Random;
  * @since 2024/6/23 18:03
  */
 public class MessageUtil {
-    private static final Random random = new Random();
+    private static final AtomicInteger id = new AtomicInteger(0);
 
-    public static Long randomMessageId(){
+    public static Long snowflakeId(){
         long timestamp = Instant.now().toEpochMilli();
-        long random = MessageUtil.random.nextInt(1024);
-        return timestamp << 10 | random;
+        int sequence = id.getAndIncrement() & ((1 << 20) - 1);
+        return timestamp << 20 | sequence;
     }
 }
