@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.context.ApplicationContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,18 +24,14 @@ import java.lang.reflect.Method;
 @Component
 @RequiredArgsConstructor
 public class AuthorizationAspect {
-    private final ApplicationContext applicationContext;
+    private final SpelExpressionParser parser;
+    private final StandardEvaluationContext context;
 
     @Before("@annotation(preAuthorization)")
     public void preAuthorization(PreAuthorization preAuthorization) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String elExpression = preAuthorization.value();
-        String[] split = elExpression.split("\\.");
-        assert split.length == 2;
-        String beanName = split[0];
-        String methodName = split[1];
-        Object bean = applicationContext.getBean(beanName);
-        Method method = bean.getClass().getMethod(methodName);
-        if (!((boolean) method.invoke(bean))) throw new AuthorizationException("没有访问权限");
+        Boolean ok = parser.parseExpression(elExpression).getValue(context, Boolean.class);
+        if (Boolean.FALSE.equals(ok)) throw new AuthorizationException("没有访问权限");
     }
 
     @Before("@annotation(com.xux.commonWeb.annotation.RequireAdmin)")
