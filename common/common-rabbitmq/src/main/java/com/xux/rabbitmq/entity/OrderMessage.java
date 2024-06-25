@@ -2,6 +2,7 @@ package com.xux.rabbitmq.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -10,12 +11,9 @@ import lombok.NoArgsConstructor;
  * @version 0.1
  * @since 2024/6/23 15:20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class OrderMessage {
-    /**
-     * 消息id，用于保证幂等性
-     */
-    private Long messageId;
+public class OrderMessage extends Message{
     /**
      * 用户id
      */

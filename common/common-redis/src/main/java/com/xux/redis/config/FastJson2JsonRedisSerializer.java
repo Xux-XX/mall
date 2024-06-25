@@ -24,6 +24,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
     @Override
     public byte[] serialize(T t) throws SerializationException {
+        if (t == null) return null;
         return JSON.toJSONString(t, JSONWriter.Feature.WriteClassName).getBytes(DEFAULT_CHARSET);
     }
 
