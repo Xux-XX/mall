@@ -3,6 +3,8 @@ package com.xux.seckill.controller;
 import com.xux.commonWeb.annotation.RequireLogin;
 import com.xux.core.entity.Result;
 import com.xux.seckill.pojo.enums.SeckillEnum;
+import com.xux.seckill.service.ArrangementService;
+import com.xux.seckill.service.ProductService;
 import com.xux.seckill.service.SeckillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,4 +34,5 @@ public class SeckillController {
         if (status == SeckillEnum.SUCCESS) return Result.ok(status.getMessage());
         return Result.fail(status.getMessage());
     }
+
 }
