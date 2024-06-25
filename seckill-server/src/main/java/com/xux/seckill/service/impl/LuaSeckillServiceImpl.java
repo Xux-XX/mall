@@ -1,7 +1,7 @@
 package com.xux.seckill.service.impl;
 
+import com.xux.commonWeb.api.AddressFeignClient;
 import com.xux.commonWeb.context.UserContext;
-import com.xux.feign.api.AddressFeignClient;
 import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.rabbitmq.util.MessageUtil;
 import com.xux.seckill.pojo.constant.RedisConstant;
@@ -93,12 +93,15 @@ public class LuaSeckillServiceImpl implements SeckillService {
         if (status == SeckillEnum.SUCCESS){
             log.info("用户{}抢购成功:商品id为{}", UserContext.get(), productId);
             OrderMessage message = new OrderMessage();
-            message.setMessageId(MessageUtil.snowflakeId());
+            Long snowId = MessageUtil.snowflakeId();
+            message.setMessageId(snowId);
             message.setNumber(number);
             message.setUserId(UserContext.get().getUserId());
             message.setAddressId(addressId);
             message.setProductId(productId);
             rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
+            // 前端通过返回的snowId和userId去轮询订单是否创建
+            status.setData(snowId);
         }
         return status;
     }

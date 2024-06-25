@@ -1,6 +1,6 @@
-package com.xux.feign.api;
+package com.xux.commonWeb.api;
 
-import com.xux.feign.entity.Address;
+import com.xux.commonWeb.pojo.entity.Address;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

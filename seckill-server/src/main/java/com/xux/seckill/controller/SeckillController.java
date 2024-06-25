@@ -1,6 +1,5 @@
 package com.xux.seckill.controller;
 
-import com.xux.commonWeb.annotation.RequireLogin;
 import com.xux.core.entity.Result;
 import com.xux.seckill.pojo.enums.SeckillEnum;
 import com.xux.seckill.service.SeckillService;
@@ -29,7 +28,8 @@ public class SeckillController {
                             @RequestParam("number") Integer number,
                             @RequestParam("addressId") Integer addressId){
         SeckillEnum status = seckillService.doSeckill(seckillId, productId, number, addressId);
-        if (status == SeckillEnum.SUCCESS) return Result.ok(status.getMessage());
+        if (status == SeckillEnum.SUCCESS) return Result.ok(status.getMessage(), status.getData());
         return Result.fail(status.getMessage());
     }
+
 }

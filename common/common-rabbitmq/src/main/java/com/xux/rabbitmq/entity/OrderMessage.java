@@ -1,9 +1,7 @@
 package com.xux.rabbitmq.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * 用于通过消息队列创建订单时的传输
@@ -26,6 +24,10 @@ public class OrderMessage extends Message{
      * 购买数量
      */
     private Integer number;
+    /**
+     * 总共需支付价格
+     */
+    private Double totalPrice;
     /**
      * 地址id
      */

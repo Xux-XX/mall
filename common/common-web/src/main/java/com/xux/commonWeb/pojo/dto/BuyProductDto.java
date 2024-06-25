@@ -1,4 +1,4 @@
-package com.xux.feign.dto;
+package com.xux.commonWeb.pojo.dto;
 
 import lombok.Data;
 

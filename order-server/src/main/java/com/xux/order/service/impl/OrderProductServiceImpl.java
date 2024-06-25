@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xux.order.mapper.OrderProductMapper;
 import com.xux.order.pojo.entity.OrderProduct;
 import com.xux.order.service.OrderProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -26,5 +25,10 @@ public class OrderProductServiceImpl extends ServiceImpl<OrderProductMapper, Ord
     @Override
     public void addProductBatch(List<OrderProduct> list) {
         OrderProductServiceImpl.saveBatch(list);
+    }
+
+    @Override
+    public void addProduct(OrderProduct orderProduct) {
+        this.save(orderProduct);
     }
 }

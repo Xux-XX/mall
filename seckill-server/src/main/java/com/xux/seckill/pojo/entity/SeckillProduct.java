@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @TableName("tb_seckill_product")
 public class SeckillProduct extends BaseEntity {
     /**
-     * 关联商品id
+     * 关联场次id
      */
     private Integer seckillId;
     /**

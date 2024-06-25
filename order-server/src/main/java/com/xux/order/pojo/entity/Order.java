@@ -3,11 +3,13 @@ package com.xux.order.pojo.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.xux.commonWeb.pojo.entity.Address;
 import com.xux.commonWeb.pojo.entity.BaseEntity;
-import com.xux.feign.entity.Address;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
+
+import java.time.LocalDateTime;
 
 /**
  * @author xux
@@ -28,6 +30,10 @@ public class Order extends BaseEntity {
      */
     private Integer userId;
     /**
+     * 订单过期时间点
+     */
+    private LocalDateTime expireAt;
+    /**
      * 需要支付的价格
      */
     private Double payPrice;
@@ -35,6 +41,10 @@ public class Order extends BaseEntity {
      * 订单备注
      */
     private String note;
+    /**
+     * 秒杀业务中产生的uid
+     */
+    private Long seckillMessageId;
     /**
      * 订单状态:
      *  0: 未支付
@@ -64,7 +74,7 @@ public class Order extends BaseEntity {
      */
     private String consigneeRegion;
     /**
-     * 收货地址(省)
+     * 详细地址
      */
     private String consigneeDetailAddress;
 

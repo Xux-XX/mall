@@ -1,5 +1,6 @@
-package com.xux.feign.config;
+package com.xux.commonWeb.config;
 
+import com.xux.commonWeb.interceptor.FeignUserHeaderInterceptor;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
@@ -13,5 +14,10 @@ public class FeignConfig {
     @Bean
     public ResultDecoder resultDecoder(){
         return new ResultDecoder();
+    }
+
+    @Bean
+    public FeignUserHeaderInterceptor userHeaderInterceptor(){
+        return new FeignUserHeaderInterceptor();
     }
 }

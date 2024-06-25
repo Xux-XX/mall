@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: name
-  cloud:
-    nacos:
-      server-addr: 192.168.88.128:8848
-server:
-  port: 1234

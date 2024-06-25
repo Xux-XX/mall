@@ -11,3 +11,6 @@ spring:
           stateless: true
           multiplier: 1.5
           initial-interval: 1000ms
+mall:
+  order:
+    expire: 15

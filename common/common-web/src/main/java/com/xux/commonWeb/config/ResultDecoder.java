@@ -1,4 +1,4 @@
-package com.xux.feign.config;
+package com.xux.commonWeb.config;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +26,7 @@ public class ResultDecoder implements Decoder {
      * @exception IllegalArgumentException 返回data字段为空
      */
     @Override
-    public Object decode(Response response, Type type) throws IOException, DecodeException, FeignException {
+    public Object decode(Response response, Type type) throws IOException, FeignException {
         if (response.status() / 100 != 2)throw new RuntimeException("服务端返回值异常");
         JavaType resultType = TypeFactory.defaultInstance().constructType(Result.class);
         Result result = objectMapper.readValue(response.body().asReader(StandardCharsets.UTF_8), resultType);

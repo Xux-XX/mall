@@ -13,6 +13,16 @@ public enum SeckillEnum {
     ERROR_ARG("参数异常");
 
     private final String message;
+    private Long data;
+
+    public Long getData() {
+        return data;
+    }
+
+    public SeckillEnum setData(Long data) {
+        this.data = data;
+        return this;
+    }
 
     SeckillEnum(String message) {
         this.message = message;

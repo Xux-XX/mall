@@ -1,4 +1,4 @@
-package com.xux.feign.entity;
+package com.xux.commonWeb.pojo.entity;
 
 import lombok.Data;
 
