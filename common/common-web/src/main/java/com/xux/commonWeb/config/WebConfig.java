@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 0.1
  * @since 2024/6/10 13:47
  */
-@ComponentScan({"com.xux.commonWeb.service.impl", "com.xux.commonWeb.aspect"})
+@ComponentScan({"com.xux.commonWeb.service.impl", "com.xux.commonWeb.aspect", "com.xux.commonWeb.advice"})
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

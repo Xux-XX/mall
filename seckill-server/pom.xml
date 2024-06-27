@@ -31,8 +31,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
+            <groupId>com.xux</groupId>
+            <artifactId>common-rabbitmq</artifactId>
+            <version>${common-rabbitmq.version}</version>
         </dependency>
     </dependencies>
 </project>

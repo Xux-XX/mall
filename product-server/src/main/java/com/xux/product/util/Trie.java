@@ -170,7 +170,7 @@ public class Trie {
             Node now = root;
             for (int i=0; i < s.length(); i++){
                 char ch = s.charAt(i);
-                if (now.next.containsKey(ch) == false) cnt ++;
+                if (!now.next.containsKey(ch)) cnt ++;
                 now = now.next.computeIfAbsent(ch, Node::new);
             }
             now.length = s.length();

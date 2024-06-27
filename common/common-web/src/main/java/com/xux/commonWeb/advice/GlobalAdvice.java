@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 public class GlobalAdvice {
-    @ExceptionHandler(AuthorizationException.class)
-    public Result authorizationException(AuthorizationException e){
+    @ExceptionHandler({AuthorizationException.class, IllegalArgumentException.class})
+    public Result authorizationException(Exception e){
         return Result.fail(e.getMessage());
+    }
+    @ExceptionHandler(Exception.class)
+    public Result otherException(){
+        return Result.error();
     }
 }

@@ -32,6 +32,6 @@ public class SeckillTest {
         Integer productId = 1;
         Integer number = 1;
         UserContext.set(new UserInfo(1, 0));
-        System.out.println(seckillService.doSeckill(seckillId, productId, number));
+//        System.out.println(seckillService.doSeckill(seckillId, productId, number));
     }
 }

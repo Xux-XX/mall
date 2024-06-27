@@ -1,0 +1,15 @@
+server:
+  port: 8004
+spring:
+  application:
+    name: order-server
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.88.128:8848
+      config:
+        group: DEFAULT_GROUP
+        namespace: ${spring.profiles.active}
+        file-extension: yml
+        shared-configs: common.yml

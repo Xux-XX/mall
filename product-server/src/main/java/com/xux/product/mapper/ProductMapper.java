@@ -1,8 +1,11 @@
 package com.xux.product.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xux.feign.dto.BuyProductDto;
 import com.xux.product.pojo.entity.Product;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author xux
@@ -11,4 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ProductMapper extends BaseMapper<Product> {
+    void increaseSalesBatch(List<BuyProductDto> buyProductDtoList);
 }

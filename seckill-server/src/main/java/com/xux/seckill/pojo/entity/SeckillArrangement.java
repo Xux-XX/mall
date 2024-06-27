@@ -1,5 +1,6 @@
 package com.xux.seckill.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xux.commonWeb.pojo.entity.BaseEntity;
@@ -20,7 +21,7 @@ public class SeckillArrangement extends BaseEntity {
     /**
      * 秒杀场次id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer seckillId;
     /**
      * 秒杀标题

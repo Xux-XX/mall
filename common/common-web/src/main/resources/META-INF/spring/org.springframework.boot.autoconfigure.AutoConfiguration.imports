@@ -1,3 +1,4 @@
 com.xux.commonWeb.config.MybatisConfig
 com.xux.commonWeb.config.WebConfig
 com.xux.commonWeb.aspect.AuthorizationAspect
+com.xux.commonWeb.config.FeignConfig

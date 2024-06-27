@@ -62,23 +62,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-<!--        openfeign远程调用服务-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-<!--        openfeign需要使用到的复杂均衡器-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-        </dependency>
-
 <!--        swagger 依赖-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -98,5 +81,11 @@
             <artifactId>fastjson2</artifactId>
             <version>${fastjson2.version}</version>
         </dependency>
+<!--        openfeign用于服务间远程调用-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

@@ -7,6 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.xux.core.util.JWTUtil;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 /**
  * @author xux
  * @version 0.1
@@ -15,9 +17,6 @@ import org.junit.jupiter.api.Test;
 public class TestWithoutSpring {
     @Test
     void test(){
-        JWTUtil util = new JWTUtil("xux_XX", 24, "GMT+8");
-        String jwt = util.createJWT(1, 0);
-        jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTkxMzA4NDQsInVzZXJJZCI6IjExIiwicm9sZVN0YXR1cyI6IjEifQ.9OGBn8tqR6kVucCkMV1qBemx7X9wi3iyRwI2a1bOO_c";
-        System.out.println(util.parse(jwt).getClaim("userId"));
+        System.out.println(Instant.now().toEpochMilli());
     }
 }

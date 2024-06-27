@@ -1,3 +1,16 @@
 spring:
-  application:
-    name: order-server
+  rabbitmq:
+    host: 192.168.88.128
+    username: xux
+    password: 123456
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          stateless: true
+          multiplier: 1.5
+          initial-interval: 1000ms
+mall:
+  order:
+    expire: 15
