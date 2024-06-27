@@ -100,9 +100,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
                 .eq(Order::getStatus, OrderStatusEnum.WAITING_PAYMENT.toInt())
                 .one();
         if (order == null) return null;
-        // TODO 待完成
-//        orderProductService.getByOrderId(order.getOrderId())
-//                .stream()
+        List<OrderProduct> list = orderProductService.getByOrderId(order.getOrderId());
+        OrderVo orderVo = BeanUtil.copyProperties(order, OrderVo.class);
+        orderVo.setProductList(list);
+        return orderVo;
     }
 
 }

@@ -1,10 +1,11 @@
 package com.xux.commonWeb.config;
 
 import com.xux.commonWeb.interceptor.UserContextInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +19,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addWebRequestInterceptor(new UserContextInterceptor());
+    }
+
+    @Bean
+    public SpelExpressionParser parser(){
+        return new SpelExpressionParser();
+    }
+    @Bean
+    public StandardEvaluationContext context(ApplicationContext applicationContext){
+        return new StandardEvaluationContext(applicationContext);
     }
 }

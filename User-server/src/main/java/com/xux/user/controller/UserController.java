@@ -1,5 +1,6 @@
 package com.xux.user.controller;
 
+import com.xux.commonWeb.annotation.RequireLogin;
 import com.xux.core.entity.Result;
 import com.xux.user.pojo.entity.User;
 import com.xux.user.pojo.enums.LoginStatus;
@@ -31,6 +32,7 @@ public class UserController {
 
     @DeleteMapping("logout")
     @Operation(summary = "退出登录")
+    @RequireLogin
     public Result logout(){
         userService.logout();
         return Result.ok();

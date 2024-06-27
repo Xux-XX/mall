@@ -56,7 +56,7 @@ public class CommentController {
 
     @DeleteMapping
     @Operation(summary = "删除评论")
-    @PreAuthorization("commentService.isCreator")
+    @PreAuthorization("@commentService.isCreator(#commentId)")
     public Result removeComment(Integer commentId){
         commentService.removeComment(commentId);
         return Result.ok();
