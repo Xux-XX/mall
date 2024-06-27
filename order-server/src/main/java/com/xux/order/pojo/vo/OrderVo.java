@@ -15,6 +15,7 @@ import java.util.List;
 public class OrderVo {
     private Integer orderId;
     private Integer userId;
+    private Integer storeId;
     private LocalDateTime expireAt;
     private Double payPrice;
     private String note;

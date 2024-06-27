@@ -4,6 +4,8 @@ import com.xux.order.pojo.dto.CreateOrderDto;
 import com.xux.order.pojo.vo.OrderVo;
 import com.xux.rabbitmq.entity.OrderMessage;
 
+import java.util.List;
+
 
 /**
  * @author xux
@@ -14,8 +16,9 @@ public interface OrderService {
     /**
      * 通过消息队列的消息创建订单
      * @param message 发送过来的消息
+     * @return 订单id
      */
-    void createOrderByMessage(OrderMessage message);
+    Integer createOrderByMessage(OrderMessage message);
 
     /**
      * 使用多个商品创建订单
@@ -31,4 +34,32 @@ public interface OrderService {
      * @return OrderVo
      */
     OrderVo getBySeckillMessageId(Long seckillMessageId);
+
+    /**
+     * 通过订单id获取订单信息
+     * @param orderId 订单id
+     * @return OrderVo
+     */
+    OrderVo getByOrderId(Integer orderId);
+
+    /**
+     * 按时间顺序，从近到远获取订单
+     * @param pageNumber 页号
+     * @param pageSize 页大小
+     * @return List<OrderVo>订单详情
+     */
+    List<OrderVo> getOrderByTime(Integer pageNumber, Integer pageSize);
+    /**
+     * 取消未支付订单
+     * @param orderId 订单id
+     * @return 是否更新成功
+     */
+    boolean cancelNotPayOrder(Integer orderId);
+
+    /**
+     * 订单超时,更新订单状态
+     * @param orderId 订单id
+     * @return 是否更新成功
+     */
+    boolean orderTimeout(Integer orderId);
 }

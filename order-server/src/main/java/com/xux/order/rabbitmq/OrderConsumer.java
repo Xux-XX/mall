@@ -6,7 +6,10 @@ import com.xux.rabbitmq.entity.OrderMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
+
+import static com.xux.order.pojo.contant.MQConstant.*;
 
 /**
  * @author xux
@@ -18,13 +21,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderConsumer {
     private final OrderService orderService;
-    private final String QUEUE_NAME = "create_order";
+    private final RabbitTemplate rabbitTemplate;
 
-
-    @RabbitListener(queues = QUEUE_NAME)
+    @RabbitListener(queues = ORDER_QUEUE_NAME)
     @Idempotent
     public void createOrder(OrderMessage message){
-        log.info("处理创建订单消息:{}", message);
-        orderService.createOrderByMessage(message);
+        log.info("处理创建订单:{}", message);
+        Integer orderId = orderService.createOrderByMessage(message);
+        rabbitTemplate.convertAndSend(DELAY_EXCHANGE, ORDER_ROUTE_KEY, orderId);
+    }
+
+    @RabbitListener(queues = TIMEOUT_ORDER_QUEUE_NAME)
+    public void timeoutOrder(Integer orderId){
+        log.info("订单超时:{}", orderId);
+        orderService.orderTimeout(orderId);
     }
 }
