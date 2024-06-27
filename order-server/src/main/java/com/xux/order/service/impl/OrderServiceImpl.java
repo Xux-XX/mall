@@ -1,18 +1,20 @@
 package com.xux.order.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xux.commonWeb.api.AddressFeignClient;
 import com.xux.commonWeb.api.ProductFeignClient;
 import com.xux.commonWeb.context.UserContext;
 import com.xux.commonWeb.pojo.entity.Address;
+import com.xux.commonWeb.pojo.entity.BaseEntity;
 import com.xux.commonWeb.pojo.entity.Product;
 import com.xux.commonWeb.util.BeanUtil;
 import com.xux.order.mapper.OrderMapper;
+import com.xux.order.pojo.contant.OrderStatus;
 import com.xux.order.pojo.dto.CreateOrderDto;
 import com.xux.order.pojo.dto.ProductDto;
 import com.xux.order.pojo.entity.Order;
 import com.xux.order.pojo.entity.OrderProduct;
-import com.xux.order.pojo.enums.OrderStatusEnum;
 import com.xux.order.pojo.vo.OrderVo;
 import com.xux.order.service.OrderProductService;
 import com.xux.order.service.OrderService;
@@ -42,8 +44,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     private final TransactionTemplate transactionTemplate;
     @Value("${mall.order.expire}")
     private Integer expire;
+
     @Override
-    public void createOrderByMessage(OrderMessage message) {
+    public Integer createOrderByMessage(OrderMessage message) {
         Address address = addressFeignClient.getById(message.getAddressId());
         Order order = new Order();
         order.setAddress(address);
@@ -58,6 +61,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             orderProduct.setOrderId(order.getOrderId());
             orderProductService.addProduct(orderProduct);
         });
+        return order.getOrderId();
     }
 
     @Override
@@ -97,7 +101,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Order order = this.lambdaQuery()
                 .eq(Order::getSeckillMessageId, seckillMessageId)
                 .eq(Order::getUserId, UserContext.get().getUserId())
-                .eq(Order::getStatus, OrderStatusEnum.WAITING_PAYMENT.toInt())
+                .eq(Order::getStatus, OrderStatus.WAITING_PAYMENT)
                 .one();
         if (order == null) return null;
         List<OrderProduct> list = orderProductService.getByOrderId(order.getOrderId());
@@ -106,4 +110,47 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return orderVo;
     }
 
+    @Override
+    public OrderVo getByOrderId(Integer orderId) {
+        Order order = this.lambdaQuery()
+                .eq(Order::getOrderId, orderId)
+                .one();
+        List<OrderProduct> list = orderProductService.getByOrderId(orderId);
+        OrderVo orderVo = BeanUtil.copyProperties(order, OrderVo.class);
+        orderVo.setProductList(list);
+        return orderVo;
+    }
+
+    @Override
+    public List<OrderVo> getOrderByTime(Integer pageNumber, Integer pageSize) {
+        List<Order> orderList = this.lambdaQuery()
+                .eq(Order::getUserId, UserContext.get().getUserId())
+                .orderByDesc(BaseEntity::getCreateTime)
+                .page(new Page<>(pageNumber, pageSize))
+                .getRecords();
+        return orderList.stream()
+                .map(order -> {
+                    List<OrderProduct> list = orderProductService.getByOrderId(order.getOrderId());
+                    OrderVo orderVo = BeanUtil.copyProperties(order, OrderVo.class);
+                    orderVo.setProductList(list);
+                    return orderVo;
+                })
+                .toList();
+    }
+
+    @Override
+    public boolean cancelNotPayOrder(Integer orderId) {
+        return this.lambdaUpdate()
+                .eq(Order::getOrderId, orderId)
+                .eq(Order::getStatus, OrderStatus.WAITING_PAYMENT)
+                .update();
+    }
+
+    @Override
+    public boolean orderTimeout(Integer orderId) {
+        return this.lambdaUpdate()
+                .eq(Order::getOrderId, orderId)
+                .eq(Order::getStatus, OrderStatus.WAITING_PAYMENT)
+                .update();
+    }
 }

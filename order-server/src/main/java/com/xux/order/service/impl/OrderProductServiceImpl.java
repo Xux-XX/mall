@@ -31,4 +31,11 @@ public class OrderProductServiceImpl extends ServiceImpl<OrderProductMapper, Ord
     public void addProduct(OrderProduct orderProduct) {
         this.save(orderProduct);
     }
+
+    @Override
+    public List<OrderProduct> getByOrderId(Integer orderId) {
+        return this.lambdaQuery()
+                .eq(OrderProduct::getOrderId, orderId)
+                .list();
+    }
 }

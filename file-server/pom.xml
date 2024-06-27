@@ -17,4 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.xux</groupId>
+            <artifactId>common-web</artifactId>
+            <version>${common-web.version}</version>
+        </dependency>
+    </dependencies>
 </project>

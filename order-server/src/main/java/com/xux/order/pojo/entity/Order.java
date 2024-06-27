@@ -30,6 +30,10 @@ public class Order extends BaseEntity {
      */
     private Integer userId;
     /**
+     * 商铺id
+     */
+    private Integer storeId;
+    /**
      * 订单过期时间点
      */
     private LocalDateTime expireAt;
