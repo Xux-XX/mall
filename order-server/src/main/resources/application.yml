@@ -13,4 +13,4 @@ spring:
           initial-interval: 1000ms
 mall:
   order:
-    expire: 15
+    expire: 15 #订单超时时间，单位分钟

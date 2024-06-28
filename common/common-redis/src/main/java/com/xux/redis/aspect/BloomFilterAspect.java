@@ -26,7 +26,7 @@ public class BloomFilterAspect {
     public Object filterAndAdd(ProceedingJoinPoint joinPoint, BloomFilter bloomFilter) throws Throwable {
         RBloomFilter<Object> bf = redissonClient.getBloomFilter(bloomFilter.value());
         bf.tryInit(properties.getExpectedInsertions(), properties.getFalseProbability());
-        Object arg = joinPoint.getArgs()[bloomFilter.argid()];
+        Object arg = joinPoint.getArgs()[bloomFilter.argId()];
         // 当布隆过滤器判断为空时,表示这个值不存在直接返回
         // 当查询结果不为空时,将arg加入布隆过滤器，避免一开始就初始化
         if (!bf.contains(arg))return null;

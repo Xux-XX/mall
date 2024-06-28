@@ -2,6 +2,7 @@ package com.xux.seckill.service.impl;
 
 import com.xux.commonWeb.api.AddressFeignClient;
 import com.xux.commonWeb.context.UserContext;
+import com.xux.rabbitmq.constant.MQConstant;
 import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.rabbitmq.util.MessageUtil;
 import com.xux.seckill.pojo.constant.RedisConstant;
@@ -29,8 +30,6 @@ public class LuaSeckillServiceImpl implements SeckillService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RabbitTemplate rabbitTemplate;
     private final AddressFeignClient addressFeignClient;
-    private final String EXCHANGE_NAME = "mall_exchange";
-    private final String ROUTE_KEY = "seckill.order.create";
     private final String SECKILL_SCRIPT =
         """
         --判断是否处于秒杀时间段
@@ -99,7 +98,10 @@ public class LuaSeckillServiceImpl implements SeckillService {
             message.setUserId(UserContext.get().getUserId());
             message.setAddressId(addressId);
             message.setProductId(productId);
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
+            rabbitTemplate.convertAndSend(
+                    MQConstant.BUSINESS_EXCHANGE_NAME,
+                    MQConstant.SECKILL_ORDER_ROUTE_KEY,
+                    message);
             // 前端通过返回的snowId和userId去轮询订单是否创建
             status.setData(snowId);
         }

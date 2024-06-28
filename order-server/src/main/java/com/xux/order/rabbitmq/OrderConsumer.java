@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import static com.xux.order.pojo.contant.MQConstant.*;
+import static com.xux.rabbitmq.constant.MQConstant.*;
 
 /**
  * @author xux
@@ -27,8 +27,9 @@ public class OrderConsumer {
     @Idempotent
     public void createOrder(OrderMessage message){
         log.info("处理创建订单:{}", message);
+        if (true) throw new RuntimeException("创建订单失败");
         Integer orderId = orderService.createOrderByMessage(message);
-        rabbitTemplate.convertAndSend(DELAY_EXCHANGE, ORDER_ROUTE_KEY, orderId);
+        rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, ORDER_ROUTE_KEY, orderId);
     }
 
     @RabbitListener(queues = TIMEOUT_ORDER_QUEUE_NAME)
