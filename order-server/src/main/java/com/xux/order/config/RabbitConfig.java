@@ -1,4 +1,4 @@
-package com.xux.order.Config;
+package com.xux.order.config;
 
 import com.xux.rabbitmq.constant.MQConstant;
 import org.springframework.amqp.core.*;
@@ -22,7 +22,7 @@ public class RabbitConfig {
                 MQConstant.DELAY_EXCHANGE_TYPE,
                 true,
                 false,
-                Map.of(MQConstant.DELAY_TYPE_KEY, MQConstant.TOPIC)
+                Map.of(MQConstant.DELAY_TYPE_ARG_KEY, MQConstant.TOPIC)
         );
     }
     @Bean
@@ -35,6 +35,28 @@ public class RabbitConfig {
                 .bind(timeOutQueue)
                 .to(delayExchange)
                 .with(MQConstant.ORDER_ROUTE_KEY)
+                .noargs();
+    }
+    @Bean
+    Queue createOrderQueue(){
+        return new Queue(
+                MQConstant.CREATE_ORDER_QUEUE_NAME,
+                true,
+                false,
+                false,
+                Map.of(
+                        MQConstant.FAIL_EXCHANGE_ARG_KEY, MQConstant.FAIL_EXCHANGE_NAME,
+                        MQConstant.FAIL_ROUTE_ARG_KEY, MQConstant.MESSAGE_PROCESS_FAIL_ROUTE_KEY
+                )
+        );
+    }
+
+    @Bean
+    Binding bindCreateQueue(Exchange mallExchange, Queue createOrderQueue){
+        return BindingBuilder
+                .bind(createOrderQueue)
+                .to(mallExchange)
+                .with(MQConstant.CREATE_ORDER_BIND_KEY)
                 .noargs();
     }
 }

@@ -29,11 +29,13 @@ public class MQConstant {
     /**
      * 用于设置延迟交换机类型的KEY
      */
-    public static final String DELAY_TYPE_KEY = "x-delayed-type";
+    public static final String DELAY_TYPE_ARG_KEY = "x-delayed-type";
     /**
      * 用于指定私信交换机的KEY
      */
-    public static final String DEAD_EXCHANGE_KEY = "x-dead-letter-exchange";
+    public static final String FAIL_EXCHANGE_ARG_KEY = "x-dead-letter-exchange";
+
+    public static final String FAIL_ROUTE_ARG_KEY = "x-dead-letter-routing-key";
 
 
 /*#############################          EXCHANGE_NAME         #############################*/
@@ -61,7 +63,7 @@ public class MQConstant {
     /**
      * 创建订单队列名称
      */
-    public static final String ORDER_QUEUE_NAME = "create_order";
+    public static final String CREATE_ORDER_QUEUE_NAME = "create_order";
     /**
      * 超时订单队列，通过监听这个队列来更新订单超时状态
      */
@@ -82,4 +84,9 @@ public class MQConstant {
      * 秒杀订单的路由key
      */
     public static final String SECKILL_ORDER_ROUTE_KEY = "seckill.order.create";
+
+
+    /*#############################          BIND_ROUTE_KEY         #############################*/
+
+    public static final String CREATE_ORDER_BIND_KEY = "*.order.create";
 }
