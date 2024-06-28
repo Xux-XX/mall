@@ -1,5 +1,6 @@
 package com.xux.order;
 
+import com.xux.rabbitmq.constant.MQConstant;
 import com.xux.rabbitmq.entity.OrderMessage;
 import com.xux.rabbitmq.util.MessageUtil;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class OrderTest {
     @Autowired
     RabbitTemplate rabbitTemplate;
-    private final String EXCHANGE_NAME = "mall_exchange";
-    private final String ROUTE_KEY = "seckill.order.create";
     @Test
     void testConsumer(){
         OrderMessage message = new OrderMessage();
@@ -27,8 +26,10 @@ public class OrderTest {
         message.setNumber(1);
         message.setProductId(1);
         message.setAddressId(1);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTE_KEY, message);
+        rabbitTemplate.convertAndSend(
+                MQConstant.BUSINESS_EXCHANGE_NAME,
+                MQConstant.SECKILL_ORDER_ROUTE_KEY,
+                message
+        );
     }
 }

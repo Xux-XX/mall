@@ -23,11 +23,10 @@ public class OrderConsumer {
     private final OrderService orderService;
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = ORDER_QUEUE_NAME)
-    @Idempotent
+    @RabbitListener(queues = CREATE_ORDER_QUEUE_NAME)
+//    @Idempotent
     public void createOrder(OrderMessage message){
         log.info("处理创建订单:{}", message);
-        if (true) throw new RuntimeException("创建订单失败");
         Integer orderId = orderService.createOrderByMessage(message);
         rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, ORDER_ROUTE_KEY, orderId);
     }
