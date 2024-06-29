@@ -1,7 +1,7 @@
 package com.xux.product.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xux.feign.dto.BuyProductDto;
+import com.xux.commonWeb.pojo.dto.BuyProductDto;
 import com.xux.product.pojo.entity.Product;
 import org.apache.ibatis.annotations.Mapper;
 

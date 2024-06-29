@@ -1,6 +1,6 @@
 package com.xux.product.service;
 
-import com.xux.feign.dto.BuyProductDto;
+import com.xux.commonWeb.pojo.dto.BuyProductDto;
 import com.xux.product.exception.ProductNotFoundException;
 import com.xux.product.pojo.dto.ProductUpdateDTO;
 import com.xux.product.pojo.entity.Product;
@@ -51,6 +51,8 @@ public interface ProductService {
      * @throws ProductNotFoundException 商品id不存在或被删除时抛出
      */
     Product getProductById(Integer productId);
+
+    List<Product> getProductByIds(List<Integer> ids);
 
     /**
      * 通过店铺获取商品
