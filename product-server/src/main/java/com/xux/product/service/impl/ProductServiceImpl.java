@@ -9,8 +9,11 @@ import com.xux.product.pojo.dto.ProductUpdateDTO;
 import com.xux.product.pojo.entity.Product;
 import com.xux.product.pojo.enums.ProductOrderBy;
 import com.xux.product.service.ProductService;
+import com.xux.product.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -26,8 +29,9 @@ import java.util.stream.Collectors;
  * @version 0.1
  * @since 2024/6/12 21:33
  */
-@Service
+@Service("productService")
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "cache:product")
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         implements ProductService {
     @Autowired
@@ -35,6 +39,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     private ProductServiceImpl thisService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ProductMapper productMapper;
+    private final StoreService storeService;
     private final String SALES_RANK_KEY = "product:sales";
     @Override
     public boolean exists(Integer productId, Integer storeId) {
@@ -42,6 +47,17 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
                 .eq(Product::getProductId, productId)
                 .eq(Product::getStoreId, storeId)
                 .exists();
+    }
+
+    @Override
+    @Cacheable(key = "#productId")
+    public boolean isOwner(Integer productId) {
+        Integer storeId = this.lambdaQuery()
+                .eq(Product::getProductId, productId)
+                .select(Product::getStoreId)
+                .one()
+                .getStoreId();
+        return storeService.isOwner(storeId);
     }
 
     @Override
@@ -83,8 +99,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     }
 
     @Override
-    public List<Product> getOutOfStock(Integer pageNumber, Integer pageSize) {
+    public List<Product> getOutOfStock(Integer storeId, Integer pageNumber, Integer pageSize) {
         return this.lambdaQuery()
+                .eq(Product::getStoreId, storeId)
                 .eq(Product::getStock, 0)
                 .page(new Page<>(pageNumber, pageSize))
                 .getRecords();

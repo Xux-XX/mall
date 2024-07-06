@@ -1,6 +1,5 @@
 package com.xux.product.service.impl;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,7 +25,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     @Override
     @Sensitive
     public List<Comment> getByStoreId(Integer storeId, Integer pageNumber, Integer pageSize, CommentOrderBy orderBy) {
-        LambdaQueryChainWrapper<Comment> query = this.lambdaQuery().eq(Comment::getStoreId, storeId);
+        LambdaQueryChainWrapper<Comment> query = this.lambdaQuery()
+                .eq(Comment::getStoreId, storeId)
+                .eq(Comment::getParentId, 0);
         // 根据参数选择不同的排序条件
         switch (orderBy){
             case RATING -> query.orderByDesc(Comment::getRating);

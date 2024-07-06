@@ -20,14 +20,20 @@ public class Store extends BaseEntity {
      */
     @TableId
     private Integer storeId;
-
     /**
      * 店铺名称
      */
     private String name;
-
     /**
      * 店铺描述
      */
     private String description;
+    /**
+     * 店铺拥有者
+     */
+    private Integer owner;
+    /**
+     * 店铺状态
+     */
+    private Integer status;
 }

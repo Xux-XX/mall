@@ -21,7 +21,12 @@ public interface ProductService {
      * @return boolean
      */
     boolean exists(Integer productId, Integer storeId);
-
+    /**
+     * 判断当前用户是否为该商品所在商铺拥有者
+     * @param productId 商品id
+     * @return boolean
+     */
+    boolean isOwner(Integer productId);
     /**
      * 添加商品
      * @param product 商品
@@ -52,6 +57,11 @@ public interface ProductService {
      */
     Product getProductById(Integer productId);
 
+    /**
+     * 通过商品id批量查询,用于内部调用
+     * @param ids 商品id集合
+     * @return List<Product>
+     */
     List<Product> getProductByIds(List<Integer> ids);
 
     /**
@@ -66,11 +76,12 @@ public interface ProductService {
 
     /**
      * 获取已经缺货的商品
+     * @param storeId 店铺id
      * @param pageNumber 页号
      * @param pageSize 页大小
      * @return List<Product>
      */
-    List<Product> getOutOfStock(Integer pageNumber, Integer pageSize);
+    List<Product> getOutOfStock(Integer storeId, Integer pageNumber, Integer pageSize);
 
     /**
      * 修改库存
@@ -88,7 +99,7 @@ public interface ProductService {
     void update(ProductUpdateDTO productUpdateDTO);
 
     /**
-     * 批量增加商品的销量
+     * 批量增加商品的销量,用于内部调用
      * @param buyProductDtoList 包含商品id和购买的数量number
      */
     void increaseSaleBatch(List<BuyProductDto> buyProductDtoList);

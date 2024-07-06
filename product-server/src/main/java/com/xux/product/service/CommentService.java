@@ -27,7 +27,7 @@ public interface CommentService extends IService<Comment> {
     List<Comment> getByUserId(Integer userId, Integer pageNumber, Integer pageSize);
 
     /**
-     * 获取一个评论下的所有评论,按照时间从旧到新排序
+     * 获取一个评论下的评论,按照时间从旧到新排序
      * @param commentId 评论id
      * @param pageNumber 页数
      * @param pageSize 页大小

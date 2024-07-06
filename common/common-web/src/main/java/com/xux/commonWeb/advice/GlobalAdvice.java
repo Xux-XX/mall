@@ -2,7 +2,7 @@ package com.xux.commonWeb.advice;
 
 import com.xux.commonWeb.exception.AuthorizationException;
 import com.xux.core.entity.Result;
-import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalAdvice {
-    @ExceptionHandler({AuthorizationException.class, IllegalArgumentException.class, ConstraintViolationException.class})
+    @ExceptionHandler({AuthorizationException.class, IllegalArgumentException.class, ValidationException.class})
     public Result authorizationException(Exception e){
         return Result.fail(e.getMessage());
     }

@@ -30,10 +30,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("store/{storeId}")
-    @Operation(summary = "根据店铺id获取评论")
-    public Result getCommentByStore(@PathVariable("storeId") Integer storeId,
-                                    @RequestParam("pageNumber") Integer pageNumber,
-                                    @RequestParam("pageSize") @Max(value = 30, message = "页大小最大为30") Integer pageSize,
+    @Operation(summary = "根据店铺id获取一级评论")
+    public Result getCommentByStore(@PathVariable Integer storeId,
+                                    @RequestParam Integer pageNumber,
+                                    @RequestParam @Max(value = 30, message = "页大小最大为30") Integer pageSize,
                                     @RequestParam(name = "orderBy", defaultValue = "DEFAULT") CommentOrderBy orderBy){
         List<Comment> data = commentService.getByStoreId(storeId, pageNumber, pageSize, orderBy);
         return Result.ok("查询成功", data);
@@ -41,11 +41,20 @@ public class CommentController {
 
     @GetMapping("user/{userId}")
     @Operation(summary = "根据用户名获取评论")
-    public Result getCommentByUser(@PathVariable("userId") Integer userId,
-                                   @RequestParam("pageNumber") Integer pageNumber,
-                                   @RequestParam("pageSize") @Max(value = 30, message = "页大小最大为30") Integer pageSize){
+    public Result getCommentByUser(@PathVariable Integer userId,
+                                   @RequestParam Integer pageNumber,
+                                   @RequestParam @Max(value = 30, message = "页大小最大为30") Integer pageSize){
         List<Comment> data = commentService.getByUserId(userId, pageNumber, pageSize);
         return Result.ok("查询成功", data);
+    }
+
+    @GetMapping("children/{parentId}")
+    @Operation(summary = "获取一个评论下的子评论")
+    public Result getChildrenComment(@PathVariable Integer parentId,
+                                     @RequestParam Integer pageNumber,
+                                     @RequestParam @Max(value = 30, message = "页大小最大为30") Integer pageSize){
+        List<Comment> childrenComments = commentService.getByParentId(parentId, pageNumber, pageSize);
+        return Result.ok("查询成功", childrenComments);
     }
 
     @PostMapping
