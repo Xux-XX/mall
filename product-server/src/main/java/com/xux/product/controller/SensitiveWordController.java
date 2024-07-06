@@ -7,8 +7,9 @@ import com.xux.product.pojo.enums.SensitiveEnum;
 import com.xux.product.service.SensitiveWordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.PermitAll;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +21,10 @@ import java.util.Map;
  * @since 2024/6/10 17:15
  */
 @RestController
-@RequestMapping("sensitive")
+@RequestMapping("/sensitive")
 @RequiredArgsConstructor
 @Tag(name = "敏感词管理")
-@PermitAll
+@Validated
 public class SensitiveWordController {
     private final SensitiveWordService service;
 
@@ -31,7 +32,7 @@ public class SensitiveWordController {
     @Operation(summary = "查询敏感词")
     @RequireAdmin
     public Result getWord(@RequestParam("pageNumber") Integer pageNumber,
-                          @RequestParam("pageSize") Integer pageSize){
+                          @RequestParam("pageSize") @Max(value = 30, message = "页大小最大为30") Integer pageSize){
         List<SensitiveWord> data = service.getPage(pageNumber, pageSize);
         return Result.ok("操作成功", data);
     }

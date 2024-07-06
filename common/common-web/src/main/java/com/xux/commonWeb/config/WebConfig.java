@@ -18,7 +18,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addWebRequestInterceptor(new UserContextInterceptor());
+        registry.addWebRequestInterceptor(new UserContextInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/doc.html",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                );
     }
 
     @Bean

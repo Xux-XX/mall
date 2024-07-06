@@ -9,6 +9,7 @@ import com.xux.product.pojo.enums.CommentOrderBy;
 import com.xux.product.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,21 +29,21 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("{storeId}")
+    @GetMapping("store/{storeId}")
     @Operation(summary = "根据店铺id获取评论")
     public Result getCommentByStore(@PathVariable("storeId") Integer storeId,
                                     @RequestParam("pageNumber") Integer pageNumber,
-                                    @RequestParam("pageSize") Integer pageSize,
+                                    @RequestParam("pageSize") @Max(value = 30, message = "页大小最大为30") Integer pageSize,
                                     @RequestParam(name = "orderBy", defaultValue = "DEFAULT") CommentOrderBy orderBy){
         List<Comment> data = commentService.getByStoreId(storeId, pageNumber, pageSize, orderBy);
         return Result.ok("查询成功", data);
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("user/{userId}")
     @Operation(summary = "根据用户名获取评论")
     public Result getCommentByUser(@PathVariable("userId") Integer userId,
                                    @RequestParam("pageNumber") Integer pageNumber,
-                                   @RequestParam("pageSize") Integer pageSize){
+                                   @RequestParam("pageSize") @Max(value = 30, message = "页大小最大为30") Integer pageSize){
         List<Comment> data = commentService.getByUserId(userId, pageNumber, pageSize);
         return Result.ok("查询成功", data);
     }
