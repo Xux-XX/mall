@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ProductService {
     /**
-     * 查询指定场次的所有商品(后端使用)
+     * 查询指定场次的所有商品(内部调用)
      * @param seckillId 场次id
      * @return List<SeckillProduct>
      */
